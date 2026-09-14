@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>Oakbank Service Centre</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#111827;color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+h1{font-size:20px;margin:2px 0}.eyebrow{font-size:11px;letter-spacing:.14em;opacity:.7;font-weight:700}main{max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px #0001}
+h2,h3{margin-top:0}.muted{color:#6b7280}label{display:block;font-weight:600;margin:14px 0}
+input{width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px}
+button{border:0;border-radius:10px;padding:13px 16px;font-size:15px;font-weight:700;background:#111827;color:#fff;cursor:pointer}
+.secondary{background:#374151}.hidden{display:none!important}.message{min-height:20px;color:#b91c1c}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.tile{text-align:left;background:#fff;color:#111827;border:1px solid #e5e7eb;padding:18px}
+.tile span{font-size:26px;display:block;margin-bottom:10px}.tile b{display:block}.tile small{display:block;color:#6b7280;margin-top:4px}
+.status{font-weight:600}@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+<div><div class="eyebrow">MANAGEMENT</div><h1>Oakbank Service Centre</h1></div>
+<button id="logout" class="secondary hidden">Log out</button>
+</header>
+<main>
+<section id="login" class="card">
+<h2>Manager Login</h2><p class="muted">Sign in with your Supabase manager account.</p>
+<form id="form">
+<label>Email<input id="email" type="email" required autocomplete="email"></label>
+<label>Password<input id="password" type="password" required autocomplete="current-password"></label>
+<button type="submit">Sign in</button><p id="msg" class="message"></p>
+</form>
+</section>
+
+<section id="dash" class="hidden">
+<div class="card"><div class="eyebrow">DASHBOARD</div><h2>Welcome back</h2><p class="muted">Oakbank Service Centre management</p></div>
+<div class="grid">
+<button class="tile" data-s="jobs"><span>🔧</span><b>Jobs</b><small>Repair jobs & status</small></button>
+<button class="tile" data-s="customers"><span>👥</span><b>Customers</b><small>Customer records</small></button>
+<button class="tile" data-s="vehicles"><span>🚗</span><b>Vehicles</b><small>Vehicle records</small></button>
+<button class="tile" data-s="payments"><span>💰</span><b>Payments</b><small>Payments & balances</small></button>
+<button class="tile" data-s="reports"><span>📊</span><b>Weekend Report</b><small>Manager reporting</small></button>
+<button class="tile" data-s="parts"><span>📦</span><b>Parts</b><small>Parts on jobs</small></button>
+</div>
+<div class="card"><h3>Connection</h3><p id="status" class="status">Checking Supabase…</p></div>
+<div id="panel" class="card hidden"></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://gwzfrsixcdsyczbpmfqq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true
+  }
+});
+
+const loginView = document.getElementById("login");
+const dashView = document.getElementById("dash");
+const logoutBtn = document.getElementById("logout");
+const form = document.getElementById("form");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const msg = document.getElementById("msg");
+const panel = document.getElementById("panel");
+const statusEl = document.getElementById("status");
+
+function dashboard() {
+  loginView.classList.add("hidden");
+  dashView.classList.remove("hidden");
+  logoutBtn.classList.remove("hidden");
+  statusEl.textContent = "Connected to Supabase ✓";
+}
+
+function loginScreen() {
+  dashView.classList.add("hidden");
+  loginView.classList.remove("hidden");
+  logoutBtn.classList.add("hidden");
+}
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  msg.style.color = "#6b7280";
+  msg.textContent = "Signing in…";
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  if (!email || !password) {
+    msg.style.color = "#b91c1c";
+    msg.textContent = "Please enter both email and password.";
+    return;
+  }
+
+  try {
+    const result = await db.auth.signInWithPassword({ email, password });
+
+    if (result.error) {
+      msg.style.color = "#b91c1c";
+      msg.textContent = result.error.message;
+      return;
+    }
+
+    if (!result.data || !result.data.session) {
+      msg.style.color = "#b91c1c";
+      msg.textContent = "Login did not create a session. In Supabase, check Authentication → Users and make sure this user is confirmed.";
+      return;
+    }
+
+    msg.textContent = "";
+    dashboard();
+  } catch (err) {
+    msg.style.color = "#b91c1c";
+    msg.textContent = "Login error: " + (err.message || err);
+  }
+});
+
+logoutBtn.addEventListener("click", async function() {
+  await db.auth.signOut();
+  loginScreen();
+  passwordInput.value = "";
+  msg.textContent = "";
+});
+
+document.querySelectorAll(".tile").forEach(function(button) {
+  button.addEventListener("click", function() {
+    const title = button.querySelector("b").textContent;
+    panel.classList.remove("hidden");
+    panel.innerHTML = "<h3>" + title + "</h3><p class='muted'>This section is connected. We'll build the full controls next.</p>";
+  });
+});
+
+db.auth.onAuthStateChange(function(event, session) {
+  if (session) {
+    dashboard();
+  } else {
+    loginScreen();
+  }
+});
+
+(async function() {
+  try {
+    const result = await db.auth.getSession();
+    if (result.error) throw result.error;
+
+    if (result.data.session) {
+      dashboard();
+    } else {
+      loginScreen();
+    }
+  } catch (err) {
+    loginScreen();
+    msg.style.color = "#b91c1c";
+    msg.textContent = "Supabase connection error: " + (err.message || err);
+  }
+})();
+</script>
+</body>
+</html>
