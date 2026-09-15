@@ -182,30 +182,209 @@ const sectionInfo = {
     actions: ["Add Part", "View Parts"]
   }
 };
+function newJobForm() {
+  panel.innerHTML = `
+    <h3>🔧 New Job</h3>
+    <p class="muted">Enter the repair job details.</p>
+
+    <form id="jobForm">
+
+      <label>
+        Customer Name
+        <input id="jobCustomer" required placeholder="Customer name">
+      </label>
+
+      <label>
+        Phone
+        <input id="jobPhone" type="tel" placeholder="Phone number">
+      </label>
+
+      <label>
+        Vehicle
+        <input id="jobVehicle" required placeholder="Example: 2018 GMC Sierra">
+      </label>
+
+      <label>
+        Licence Plate
+        <input id="jobPlate" placeholder="Licence plate">
+      </label>
+
+      <label>
+        Repair Description
+        <textarea id="jobDescription" required
+        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;min-height:100px;"
+        placeholder="Describe the repair"></textarea>
+      </label>
+
+      <label>
+        Estimated Total ($)
+        <input id="jobTotal" type="number" min="0" step="0.01" placeholder="0.00">
+      </label>
+
+      <label>
+        Job Status
+        <select id="jobStatus"
+        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;">
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Waiting for Parts</option>
+          <option>Ready</option>
+          <option>Completed</option>
+        </select>
+      </label>
+
+      <label>
+        Notes
+        <textarea id="jobNotes"
+        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;min-height:100px;"
+        placeholder="Additional notes"></textarea>
+      </label>
+
+      <div class="section-actions">
+        <button type="submit">Save Job</button>
+        <button type="button" id="cancelJob" class="secondary">Cancel</button>
+      </div>
+
+      <p id="jobMsg" class="message"></p>
+
+    </form>
+  `;
+
+  panel.classList.remove("hidden");
+
+  setTimeout(function() {
+    panel.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 50);
+
+  document.getElementById("cancelJob").addEventListener("click", function() {
+    showJobsPanel();
+  });
+
+  document.getElementById("jobForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const jobMsg = document.getElementById("jobMsg");
+
+    jobMsg.style.color = "#166534";
+    jobMsg.textContent = "Job information entered ✓";
+
+    console.log({
+      customer: document.getElementById("jobCustomer").value,
+      phone: document.getElementById("jobPhone").value,
+      vehicle: document.getElementById("jobVehicle").value,
+      plate: document.getElementById("jobPlate").value,
+      description: document.getElementById("jobDescription").value,
+      total: document.getElementById("jobTotal").value,
+      status: document.getElementById("jobStatus").value,
+      notes: document.getElementById("jobNotes").value
+    });
+  });
+}
+
+
+function showJobsPanel() {
+
+  panel.innerHTML = `
+    <h3>🔧 Jobs</h3>
+    <p class="muted">Repair jobs and job status.</p>
+
+    <div class="section-actions">
+
+      <button type="button" id="newJobButton">
+        New Job
+      </button>
+
+      <button type="button" id="viewJobsButton">
+        View Jobs
+      </button>
+
+    </div>
+  `;
+
+  panel.classList.remove("hidden");
+
+  document.getElementById("newJobButton").addEventListener("click", function() {
+    newJobForm();
+  });
+
+  document.getElementById("viewJobsButton").addEventListener("click", function() {
+    panel.innerHTML = `
+      <h3>🔧 View Jobs</h3>
+      <p class="muted">
+        We will connect this to your job database next.
+      </p>
+    `;
+  });
+
+  setTimeout(function() {
+    panel.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 50);
+}
+
 
 document.querySelectorAll(".tile").forEach(function(button) {
+
   button.addEventListener("click", function() {
+
     const key = button.dataset.s;
     const info = sectionInfo[key];
+
+    if (key === "jobs") {
+      showJobsPanel();
+      return;
+    }
 
     panel.innerHTML =
       "<h3>" + info.title + "</h3>" +
       "<p class='muted'>" + info.text + "</p>" +
       "<div class='section-actions'>" +
+
       info.actions.map(function(action) {
-        return "<button type='button'>" + action + "</button>";
+
+        return "<button type='button' data-action='" +
+          action + "'>" +
+          action +
+          "</button>";
+
       }).join("") +
+
       "</div>";
 
     panel.classList.remove("hidden");
 
-    // Bring the opened section into view on mobile.
-    setTimeout(function() {
-      panel.scrollIntoView({behavior:"smooth", block:"start"});
-    }, 50);
-  });
-});
+    panel.querySelectorAll("[data-action]").forEach(function(actionButton) {
 
+      actionButton.addEventListener("click", function() {
+
+        panel.innerHTML =
+          "<h3>" + info.title + "</h3>" +
+          "<p class='muted'>" +
+          actionButton.dataset.action +
+          " will be added next.</p>";
+
+      });
+
+    });
+
+    setTimeout(function() {
+
+      panel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    }, 50);
+
+  });
+
+});
+ 
 db.auth.onAuthStateChange(function(event, session) {
   if (session) {
     dashboard();
