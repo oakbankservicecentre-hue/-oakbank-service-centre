@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -14,7 +14,8 @@ main{max-width:900px;margin:auto;padding:20px}
 .card{background:#fff;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px #0001}
 h2,h3{margin-top:0}.muted{color:#6b7280}
 label{display:block;font-weight:600;margin:14px 0}
-input{width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px}
+input,select,textarea{width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;font-family:inherit}
+textarea{min-height:100px;resize:vertical}
 button{border:0;border-radius:10px;padding:13px 16px;font-size:15px;font-weight:700;background:#111827;color:#fff;cursor:pointer}
 .secondary{background:#374151}.hidden{display:none!important}.message{min-height:20px;color:#b91c1c}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
@@ -22,7 +23,11 @@ button{border:0;border-radius:10px;padding:13px 16px;font-size:15px;font-weight:
 .tile span{font-size:26px;display:block;margin-bottom:10px}.tile b{display:block}.tile small{display:block;color:#6b7280;margin-top:4px}
 .status{font-weight:600}
 .section-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.section-actions button{background:#111827}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.job-item{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-top:10px}
+.job-item strong{display:block;margin-bottom:5px}
+.job-meta{color:#6b7280;font-size:14px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
 @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
@@ -51,7 +56,6 @@ button{border:0;border-radius:10px;padding:13px 16px;font-size:15px;font-weight:
 <p class="muted">Oakbank Service Centre management</p>
 </div>
 
-<!-- The section panel is now ABOVE the connection card so it is visible immediately on phones. -->
 <div id="panel" class="card hidden"></div>
 
 <div class="grid">
@@ -76,168 +80,180 @@ const SUPABASE_URL = "https://gwzfrsixcdsyczbpmfqq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
 
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true
-  }
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
 });
 
-const loginView = document.getElementById("login");
-const dashView = document.getElementById("dash");
-const logoutBtn = document.getElementById("logout");
-const form = document.getElementById("form");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const msg = document.getElementById("msg");
-const panel = document.getElementById("panel");
-const statusEl = document.getElementById("status");
+const loginView=document.getElementById("login");
+const dashView=document.getElementById("dash");
+const logoutBtn=document.getElementById("logout");
+const form=document.getElementById("form");
+const emailInput=document.getElementById("email");
+const passwordInput=document.getElementById("password");
+const msg=document.getElementById("msg");
+const panel=document.getElementById("panel");
+const statusEl=document.getElementById("status");
 
-function dashboard() {
+function dashboard(){
   loginView.classList.add("hidden");
   dashView.classList.remove("hidden");
   logoutBtn.classList.remove("hidden");
-  statusEl.textContent = "Connected to Supabase ✓";
+  statusEl.textContent="Connected to Supabase ✓";
 }
-
-function loginScreen() {
+function loginScreen(){
   dashView.classList.add("hidden");
   loginView.classList.remove("hidden");
   logoutBtn.classList.add("hidden");
 }
 
-form.addEventListener("submit", async function(e) {
+form.addEventListener("submit",async function(e){
   e.preventDefault();
-  msg.style.color = "#6b7280";
-  msg.textContent = "Signing in…";
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  if (!email || !password) {
-    msg.style.color = "#b91c1c";
-    msg.textContent = "Please enter both email and password.";
-    return;
-  }
-
-  try {
-    const result = await db.auth.signInWithPassword({ email, password });
-
-    if (result.error) {
-      msg.style.color = "#b91c1c";
-      msg.textContent = result.error.message;
+  msg.style.color="#6b7280";
+  msg.textContent="Signing in…";
+  try{
+    const result=await db.auth.signInWithPassword({
+      email:emailInput.value.trim(),
+      password:passwordInput.value
+    });
+    if(result.error){
+      msg.style.color="#b91c1c";
+      msg.textContent=result.error.message;
       return;
     }
-
-    if (!result.data || !result.data.session) {
-      msg.style.color = "#b91c1c";
-      msg.textContent = "Login did not create a session. Check the user in Supabase Authentication → Users.";
+    if(!result.data || !result.data.session){
+      msg.style.color="#b91c1c";
+      msg.textContent="Login did not create a session.";
       return;
     }
-
-    msg.textContent = "";
+    msg.textContent="";
     dashboard();
-  } catch (err) {
-    msg.style.color = "#b91c1c";
-    msg.textContent = "Login error: " + (err.message || err);
+  }catch(err){
+    msg.style.color="#b91c1c";
+    msg.textContent="Login error: "+(err.message||err);
   }
 });
 
-logoutBtn.addEventListener("click", async function() {
+logoutBtn.addEventListener("click",async function(){
   await db.auth.signOut();
   loginScreen();
-  passwordInput.value = "";
-  msg.textContent = "";
+  passwordInput.value="";
+  msg.textContent="";
 });
 
-const sectionInfo = {
-  jobs: {
-    title: "🔧 Jobs",
-    text: "Repair jobs and job status.",
-    actions: ["New Job", "View Jobs"]
-  },
-  customers: {
-    title: "👥 Customers",
-    text: "Customer records and contact information.",
-    actions: ["New Customer", "View Customers"]
-  },
-  vehicles: {
-    title: "🚗 Vehicles",
-    text: "Vehicle records linked to customers.",
-    actions: ["Add Vehicle", "View Vehicles"]
-  },
-  payments: {
-    title: "💰 Payments",
-    text: "Payments, balances and job amounts.",
-    actions: ["New Payment", "View Payments"]
-  },
-  reports: {
-    title: "📊 Weekend Report",
-    text: "Manager reporting for the weekend.",
-    actions: ["Create Report", "View Reports"]
-  },
-  parts: {
-    title: "📦 Parts",
-    text: "Parts used or ordered for repair jobs.",
-    actions: ["Add Part", "View Parts"]
-  }
+const sectionInfo={
+  jobs:{title:"🔧 Jobs",text:"Repair jobs and job status.",actions:["New Job","View Jobs"]},
+  customers:{title:"👥 Customers",text:"Customer records and contact information.",actions:["New Customer","View Customers"]},
+  vehicles:{title:"🚗 Vehicles",text:"Vehicle records linked to customers.",actions:["Add Vehicle","View Vehicles"]},
+  payments:{title:"💰 Payments",text:"Payments, balances and job amounts.",actions:["New Payment","View Payments"]},
+  reports:{title:"📊 Weekend Report",text:"Manager reporting for the weekend.",actions:["Create Report","View Reports"]},
+  parts:{title:"📦 Parts",text:"Parts used or ordered for repair jobs.",actions:["Add Part","View Parts"]}
 };
-function newJobForm() {
-  panel.innerHTML = `
-    <h3>🔧 New Job</h3>
-    <p class="muted">Enter the repair job details.</p>
+
+function scrollPanel(){
+  setTimeout(function(){
+    panel.scrollIntoView({behavior:"smooth",block:"start"});
+  },50);
+}
+
+function showJobsPanel(){
+  panel.innerHTML=`
+    <h3>🔧 Jobs</h3>
+    <p class="muted">Repair jobs and job status.</p>
+    <div class="section-actions">
+      <button type="button" id="newJobButton">New Job</button>
+      <button type="button" id="viewJobsButton">View Jobs</button>
+    </div>`;
+  panel.classList.remove("hidden");
+
+  document.getElementById("newJobButton").addEventListener("click",newJobForm);
+  document.getElementById("viewJobsButton").addEventListener("click",viewJobs);
+  scrollPanel();
+}
+
+function newJobForm(){
+  panel.innerHTML=`
+    <h3>🔧 New Repair Job</h3>
+    <p class="muted">Customer and vehicle information will be linked automatically.</p>
 
     <form id="jobForm">
+      <h3>Customer</h3>
 
-      <label>
-        Customer Name
+      <label>Customer Name
         <input id="jobCustomer" required placeholder="Customer name">
       </label>
 
-      <label>
-        Phone
-        <input id="jobPhone" type="tel" placeholder="Phone number">
+      <div class="form-grid">
+        <label>Phone
+          <input id="jobPhone" type="tel" placeholder="Phone number">
+        </label>
+        <label>Email
+          <input id="jobEmail" type="email" placeholder="Email address">
+        </label>
+      </div>
+
+      <label>Address
+        <input id="jobAddress" placeholder="Customer address">
       </label>
 
-      <label>
-        Vehicle
-        <input id="jobVehicle" required placeholder="Example: 2018 GMC Sierra">
+      <h3>Vehicle</h3>
+
+      <div class="form-grid">
+        <label>Year
+          <input id="jobYear" type="number" min="1900" max="2100" placeholder="2020">
+        </label>
+        <label>Make
+          <input id="jobMake" placeholder="GMC">
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>Model
+          <input id="jobModel" placeholder="Sierra">
+        </label>
+        <label>Licence Plate
+          <input id="jobPlate" placeholder="ABC 123">
+        </label>
+      </div>
+
+      <label>VIN
+        <input id="jobVin" placeholder="VIN">
       </label>
 
-      <label>
-        Licence Plate
-        <input id="jobPlate" placeholder="Licence plate">
+      <label>Mileage
+        <input id="jobMileage" type="number" min="0" placeholder="Mileage">
       </label>
 
-      <label>
-        Repair Description
-        <textarea id="jobDescription" required
-        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;min-height:100px;"
-        placeholder="Describe the repair"></textarea>
+      <h3>Repair</h3>
+
+      <label>Repair Description
+        <textarea id="jobDescription" required placeholder="Describe the repair work"></textarea>
       </label>
 
-      <label>
-        Estimated Total ($)
-        <input id="jobTotal" type="number" min="0" step="0.01" placeholder="0.00">
+      <div class="form-grid">
+        <label>Estimate Amount ($)
+          <input id="jobEstimate" type="number" min="0" step="0.01" placeholder="0.00">
+        </label>
+        <label>Labour Amount ($)
+          <input id="jobLabour" type="number" min="0" step="0.01" placeholder="0.00">
+        </label>
+      </div>
+
+      <label>Parts Cost ($)
+        <input id="jobParts" type="number" min="0" step="0.01" placeholder="0.00">
       </label>
 
-      <label>
-        Job Status
-        <select id="jobStatus"
-        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;">
-          <option>Open</option>
-          <option>In Progress</option>
-          <option>Waiting for Parts</option>
-          <option>Ready</option>
-          <option>Completed</option>
+      <label>Status
+        <select id="jobStatus">
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Waiting for Parts">Waiting for Parts</option>
+          <option value="Ready">Ready</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
         </select>
       </label>
 
-      <label>
-        Notes
-        <textarea id="jobNotes"
-        style="width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;min-height:100px;"
-        placeholder="Additional notes"></textarea>
+      <label>Notes
+        <textarea id="jobNotes" placeholder="Additional notes"></textarea>
       </label>
 
       <div class="section-actions">
@@ -246,167 +262,169 @@ function newJobForm() {
       </div>
 
       <p id="jobMsg" class="message"></p>
-
-    </form>
-  `;
+    </form>`;
 
   panel.classList.remove("hidden");
+  scrollPanel();
 
-  setTimeout(function() {
-    panel.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, 50);
+  document.getElementById("cancelJob").addEventListener("click",showJobsPanel);
 
-  document.getElementById("cancelJob").addEventListener("click", function() {
-    showJobsPanel();
-  });
+  document.getElementById("jobForm").addEventListener("submit",saveJob);
+}
 
-  document.getElementById("jobForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+async function saveJob(e){
+  e.preventDefault();
 
-    const jobMsg = document.getElementById("jobMsg");
+  const jobMsg=document.getElementById("jobMsg");
+  jobMsg.style.color="#6b7280";
+  jobMsg.textContent="Saving customer, vehicle and job…";
 
-    jobMsg.style.color = "#166534";
-    jobMsg.textContent = "Job information entered ✓";
+  const customerName=document.getElementById("jobCustomer").value.trim();
+  const phone=document.getElementById("jobPhone").value.trim();
+  const email=document.getElementById("jobEmail").value.trim();
+  const address=document.getElementById("jobAddress").value.trim();
 
-    console.log({
-      customer: document.getElementById("jobCustomer").value,
-      phone: document.getElementById("jobPhone").value,
-      vehicle: document.getElementById("jobVehicle").value,
-      plate: document.getElementById("jobPlate").value,
-      description: document.getElementById("jobDescription").value,
-      total: document.getElementById("jobTotal").value,
-      status: document.getElementById("jobStatus").value,
-      notes: document.getElementById("jobNotes").value
-    });
+  const vehicleYear=document.getElementById("jobYear").value;
+  const vehicleMake=document.getElementById("jobMake").value.trim();
+  const vehicleModel=document.getElementById("jobModel").value.trim();
+  const plate=document.getElementById("jobPlate").value.trim();
+  const vin=document.getElementById("jobVin").value.trim();
+  const mileage=document.getElementById("jobMileage").value;
+
+  try{
+    /* 1. Create the customer */
+    const customerResult=await db.from("customers").insert({
+      name:customerName,
+      phone:phone || null,
+      email:email || null,
+      address:address || null
+    }).select("id").single();
+
+    if(customerResult.error) throw new Error("Customer: "+customerResult.error.message);
+
+    const customerId=customerResult.data.id;
+
+    /* 2. Create the vehicle */
+    const vehicleResult=await db.from("vehicles").insert({
+      customer_id:customerId,
+      year:vehicleYear ? Number(vehicleYear) : null,
+      make:vehicleMake || null,
+      model:vehicleModel || null,
+      vin:vin || null,
+      plate:plate || null,
+      mileage:mileage ? Number(mileage) : null
+    }).select("id").single();
+
+    if(vehicleResult.error) throw new Error("Vehicle: "+vehicleResult.error.message);
+
+    const vehicleId=vehicleResult.data.id;
+
+    /* 3. Create the repair job */
+    const estimate=Number(document.getElementById("jobEstimate").value||0);
+    const labour=Number(document.getElementById("jobLabour").value||0);
+    const parts=Number(document.getElementById("jobParts").value||0);
+
+    const jobResult=await db.from("repair_jobs").insert({
+      customer_id:customerId,
+      vehicle_id:vehicleId,
+      description:document.getElementById("jobDescription").value.trim(),
+      status:document.getElementById("jobStatus").value,
+      estimate_amount:estimate,
+      parts_cost:parts,
+      labour_amount:labour,
+      notes:document.getElementById("jobNotes").value.trim() || null
+    }).select("id,job_number").single();
+
+    if(jobResult.error) throw new Error("Repair job: "+jobResult.error.message);
+
+    jobMsg.style.color="#166534";
+    jobMsg.textContent="Job saved successfully ✓"+
+      (jobResult.data.job_number ? " Job #"+jobResult.data.job_number : "");
+
+    document.getElementById("jobForm").reset();
+
+  }catch(err){
+    jobMsg.style.color="#b91c1c";
+    jobMsg.textContent="Could not save: "+(err.message||err);
+  }
+}
+
+async function viewJobs(){
+  panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>Loading jobs…</p>";
+  panel.classList.remove("hidden");
+  scrollPanel();
+
+  const result=await db.from("repair_jobs")
+    .select("id,job_number,description,status,estimate_amount,parts_cost,labour_amount,date_received,created_at,customers(name,phone),vehicles(year,make,model,plate)")
+    .order("created_at",{ascending:false});
+
+  if(result.error){
+    panel.innerHTML="<h3>🔧 View Jobs</h3><p class='message'>Could not load jobs: "+escapeHtml(result.error.message)+"</p>";
+    return;
+  }
+
+  if(!result.data.length){
+    panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>No repair jobs yet.</p><div class='section-actions'><button type='button' id='newFromView'>New Job</button></div>";
+    document.getElementById("newFromView").addEventListener("click",newJobForm);
+    return;
+  }
+
+  panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>Latest repair jobs</p>"+
+    result.data.map(function(job){
+      const c=job.customers||{};
+      const v=job.vehicles||{};
+      const vehicle=[v.year,v.make,v.model].filter(Boolean).join(" ");
+      return `<div class="job-item">
+        <strong>${job.job_number ? "Job #"+escapeHtml(job.job_number)+" — " : ""}${escapeHtml(c.name||"No customer")}</strong>
+        <div class="job-meta">${escapeHtml(vehicle)} ${v.plate ? "• "+escapeHtml(v.plate):""}</div>
+        <div>${escapeHtml(job.description||"")}</div>
+        <div class="job-meta">Status: <b>${escapeHtml(job.status||"Open")}</b> • Estimate: $${Number(job.estimate_amount||0).toFixed(2)}</div>
+      </div>`;
+    }).join("")+
+    '<div class="section-actions"><button type="button" id="newFromView">New Job</button></div>';
+
+  document.getElementById("newFromView").addEventListener("click",newJobForm);
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];
   });
 }
 
+document.querySelectorAll(".tile").forEach(function(button){
+  button.addEventListener("click",function(){
+    const key=button.dataset.s;
+    const info=sectionInfo[key];
 
-function showJobsPanel() {
-
-  panel.innerHTML = `
-    <h3>🔧 Jobs</h3>
-    <p class="muted">Repair jobs and job status.</p>
-
-    <div class="section-actions">
-
-      <button type="button" id="newJobButton">
-        New Job
-      </button>
-
-      <button type="button" id="viewJobsButton">
-        View Jobs
-      </button>
-
-    </div>
-  `;
-
-  panel.classList.remove("hidden");
-
-  document.getElementById("newJobButton").addEventListener("click", function() {
-    newJobForm();
-  });
-
-  document.getElementById("viewJobsButton").addEventListener("click", function() {
-    panel.innerHTML = `
-      <h3>🔧 View Jobs</h3>
-      <p class="muted">
-        We will connect this to your job database next.
-      </p>
-    `;
-  });
-
-  setTimeout(function() {
-    panel.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, 50);
-}
-
-
-document.querySelectorAll(".tile").forEach(function(button) {
-
-  button.addEventListener("click", function() {
-
-    const key = button.dataset.s;
-    const info = sectionInfo[key];
-
-    if (key === "jobs") {
+    if(key==="jobs"){
       showJobsPanel();
       return;
     }
 
-    panel.innerHTML =
-      "<h3>" + info.title + "</h3>" +
-      "<p class='muted'>" + info.text + "</p>" +
-      "<div class='section-actions'>" +
-
-      info.actions.map(function(action) {
-
-        return "<button type='button' data-action='" +
-          action + "'>" +
-          action +
-          "</button>";
-
-      }).join("") +
-
-      "</div>";
+    panel.innerHTML="<h3>"+info.title+"</h3><p class='muted'>"+info.text+"</p><div class='section-actions'>"+
+      info.actions.map(function(action){
+        return "<button type='button'>"+action+"</button>";
+      }).join("")+"</div>";
 
     panel.classList.remove("hidden");
-
-    panel.querySelectorAll("[data-action]").forEach(function(actionButton) {
-
-      actionButton.addEventListener("click", function() {
-
-        panel.innerHTML =
-          "<h3>" + info.title + "</h3>" +
-          "<p class='muted'>" +
-          actionButton.dataset.action +
-          " will be added next.</p>";
-
-      });
-
-    });
-
-    setTimeout(function() {
-
-      panel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-
-    }, 50);
-
+    scrollPanel();
   });
-
-});
- 
-db.auth.onAuthStateChange(function(event, session) {
-  if (session) {
-    dashboard();
-  } else {
-    loginScreen();
-  }
 });
 
-(async function() {
-  try {
-    const result = await db.auth.getSession();
-    if (result.error) throw result.error;
+db.auth.onAuthStateChange(function(event,session){
+  if(session) dashboard(); else loginScreen();
+});
 
-    if (result.data.session) {
-      dashboard();
-    } else {
-      loginScreen();
-    }
-  } catch (err) {
+(async function(){
+  try{
+    const result=await db.auth.getSession();
+    if(result.error) throw result.error;
+    if(result.data.session) dashboard(); else loginScreen();
+  }catch(err){
     loginScreen();
-    msg.style.color = "#b91c1c";
-    msg.textContent = "Supabase connection error: " + (err.message || err);
+    msg.style.color="#b91c1c";
+    msg.textContent="Supabase connection error: "+(err.message||err);
   }
 })();
 </script>
