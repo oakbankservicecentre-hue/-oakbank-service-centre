@@ -1,432 +1,76 @@
- <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <title>Oakbank Service Centre</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:#111827;color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-h1{font-size:20px;margin:2px 0}.eyebrow{font-size:11px;letter-spacing:.14em;opacity:.7;font-weight:700}
-main{max-width:900px;margin:auto;padding:20px}
-.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px #0001}
-h2,h3{margin-top:0}.muted{color:#6b7280}
-label{display:block;font-weight:600;margin:14px 0}
-input,select,textarea{width:100%;padding:13px;margin-top:7px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;font-family:inherit}
-textarea{min-height:100px;resize:vertical}
-button{border:0;border-radius:10px;padding:13px 16px;font-size:15px;font-weight:700;background:#111827;color:#fff;cursor:pointer}
-.secondary{background:#374151}.hidden{display:none!important}.message{min-height:20px;color:#b91c1c}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
-.tile{text-align:left;background:#fff;color:#111827;border:1px solid #e5e7eb;padding:18px}
-.tile span{font-size:26px;display:block;margin-bottom:10px}.tile b{display:block}.tile small{display:block;color:#6b7280;margin-top:4px}
-.status{font-weight:600}
-.section-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.job-item{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-top:10px}
-.job-item strong{display:block;margin-bottom:5px}
-.job-meta{color:#6b7280;font-size:14px}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
-@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+:root{color-scheme:light;--ink:#111827;--slate:#374151;--muted:#6b7280;--border:#e5e7eb;--page:#f3f4f6;--danger:#b91c1c;--success:#166534;--focus:#2563eb}
+*{box-sizing:border-box}html{min-width:0}body{margin:0;min-width:0;overflow-x:hidden;background:var(--page);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:5;padding:16px max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left));background:var(--ink);color:#fff;box-shadow:0 1px 0 #0002}h1{margin:2px 0;font-size:clamp(18px,5vw,22px);line-height:1.15}.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;opacity:.72}main{width:min(100%,960px);margin:0 auto;padding:clamp(14px,4vw,28px) max(14px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.card{min-width:0;margin-bottom:16px;padding:clamp(16px,4vw,24px);background:#fff;border-radius:16px;box-shadow:0 2px 10px #0001}#login{max-width:520px;margin:clamp(18px,8vh,64px) auto}h2,h3{margin:0 0 8px}h2{font-size:clamp(21px,6vw,28px)}h3{font-size:clamp(18px,5vw,22px)}.muted{color:var(--muted);margin:0 0 12px}.hidden{display:none!important}.message{min-height:24px;margin:14px 0 0;color:var(--danger);overflow-wrap:anywhere}.status{font-weight:600}
+label{display:block;margin:16px 0;font-weight:650}input,select,textarea{display:block;width:100%;min-width:0;margin-top:7px;padding:13px 14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:16px;line-height:1.25}input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid #93c5fd;outline-offset:2px;border-color:var(--focus)}textarea{min-height:112px;resize:vertical}button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;border:0;border-radius:10px;padding:12px 16px;background:var(--ink);color:#fff;font:inherit;font-size:16px;font-weight:700;line-height:1.2;cursor:pointer;touch-action:manipulation}button:disabled{cursor:wait;opacity:.65}.secondary{background:var(--slate)}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin:18px 0}.tile{width:100%;min-height:112px;align-items:flex-start;text-align:left;background:#fff;color:var(--ink);border:1px solid var(--border);padding:18px}.tile span{display:block;margin-bottom:9px;font-size:26px}.tile b{display:block}.tile small{display:block;margin-top:4px;color:var(--muted);font-size:14px}.section-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.section-actions button{flex:1 1 150px}.form-section{padding:2px 0 4px;border:0}.form-heading{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--border)}.form-section:first-child .form-heading{margin-top:0;padding-top:0;border-top:0}.form-grid{display:grid;grid-template-columns:1fr;gap:0 14px}.job-item{margin-top:12px;padding:15px;border:1px solid var(--border);border-radius:12px;overflow-wrap:anywhere}.job-item strong{display:block;margin-bottom:6px;font-size:16px}.job-item p{margin:8px 0}.job-meta{color:var(--muted);font-size:14px}.job-status{display:inline-block;margin-top:9px;padding:5px 9px;border-radius:999px;background:#f3f4f6;color:var(--ink);font-size:13px;font-weight:700}.job-amount{font-variant-numeric:tabular-nums}
+@media(min-width:620px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-actions button{flex:0 1 auto}}
+@media(min-width:850px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:420px){header{align-items:flex-start}#logout{flex:0 0 auto;padding:10px 12px;font-size:14px;min-height:42px}.card{border-radius:13px}.section-actions{display:grid;grid-template-columns:1fr}.section-actions button{width:100%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header>
-<div><div class="eyebrow">MANAGEMENT</div><h1>Oakbank Service Centre</h1></div>
-<button id="logout" class="secondary hidden">Log out</button>
+  <div><div class="eyebrow">MANAGEMENT</div><h1>Oakbank Service Centre</h1></div>
+  <button id="logout" class="secondary hidden" type="button">Log out</button>
 </header>
-
 <main>
-<section id="login" class="card">
-<h2>Manager Login</h2>
-<p class="muted">Sign in with your Supabase manager account.</p>
-<form id="form">
-<label>Email<input id="email" type="email" required autocomplete="email"></label>
-<label>Password<input id="password" type="password" required autocomplete="current-password"></label>
-<button type="submit">Sign in</button>
-<p id="msg" class="message"></p>
-</form>
-</section>
-
-<section id="dash" class="hidden">
-<div class="card">
-<div class="eyebrow">DASHBOARD</div>
-<h2>Welcome back</h2>
-<p class="muted">Oakbank Service Centre management</p>
-</div>
-
-<div id="panel" class="card hidden"></div>
-
-<div class="grid">
-<button type="button" class="tile" data-s="jobs"><span>🔧</span><b>Jobs</b><small>Repair jobs & status</small></button>
-<button type="button" class="tile" data-s="customers"><span>👥</span><b>Customers</b><small>Customer records</small></button>
-<button type="button" class="tile" data-s="vehicles"><span>🚗</span><b>Vehicles</b><small>Vehicle records</small></button>
-<button type="button" class="tile" data-s="payments"><span>💰</span><b>Payments</b><small>Payments & balances</small></button>
-<button type="button" class="tile" data-s="reports"><span>📊</span><b>Weekend Report</b><small>Manager reporting</small></button>
-<button type="button" class="tile" data-s="parts"><span>📦</span><b>Parts</b><small>Parts on jobs</small></button>
-</div>
-
-<div class="card">
-<h3>Connection</h3>
-<p id="status" class="status">Checking Supabase…</p>
-</div>
-</section>
+  <section id="login" class="card">
+    <h2>Manager Login</h2>
+    <p class="muted">Sign in with your Supabase manager account.</p>
+    <form id="form">
+      <label>Email<input id="email" type="email" required autocomplete="email" inputmode="email"></label>
+      <label>Password<input id="password" type="password" required autocomplete="current-password"></label>
+      <button id="loginButton" type="submit">Sign in</button>
+      <p id="msg" class="message" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+  <section id="dash" class="hidden">
+    <div class="card"><div class="eyebrow">DASHBOARD</div><h2>Welcome back</h2><p class="muted">Oakbank Service Centre management</p></div>
+    <div id="panel" class="card hidden"></div>
+    <div class="grid">
+      <button type="button" class="tile" data-s="jobs"><span aria-hidden="true">🔧</span><b>Jobs</b><small>Repair jobs &amp; status</small></button>
+      <button type="button" class="tile" data-s="customers"><span aria-hidden="true">👥</span><b>Customers</b><small>Customer records</small></button>
+      <button type="button" class="tile" data-s="vehicles"><span aria-hidden="true">🚗</span><b>Vehicles</b><small>Vehicle records</small></button>
+      <button type="button" class="tile" data-s="payments"><span aria-hidden="true">💰</span><b>Payments</b><small>Payments &amp; balances</small></button>
+      <button type="button" class="tile" data-s="reports"><span aria-hidden="true">📊</span><b>Weekend Report</b><small>Manager reporting</small></button>
+      <button type="button" class="tile" data-s="parts"><span aria-hidden="true">📦</span><b>Parts</b><small>Parts on jobs</small></button>
+    </div>
+    <div class="card"><h3>Connection</h3><p id="status" class="status">Checking Supabase…</p></div>
+  </section>
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://gwzfrsixcdsyczbpmfqq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
-
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
-});
-
-const loginView=document.getElementById("login");
-const dashView=document.getElementById("dash");
-const logoutBtn=document.getElementById("logout");
-const form=document.getElementById("form");
-const emailInput=document.getElementById("email");
-const passwordInput=document.getElementById("password");
-const msg=document.getElementById("msg");
-const panel=document.getElementById("panel");
-const statusEl=document.getElementById("status");
-
-function dashboard(){
-  loginView.classList.add("hidden");
-  dashView.classList.remove("hidden");
-  logoutBtn.classList.remove("hidden");
-  statusEl.textContent="Connected to Supabase ✓";
-}
-function loginScreen(){
-  dashView.classList.add("hidden");
-  loginView.classList.remove("hidden");
-  logoutBtn.classList.add("hidden");
-}
-
-form.addEventListener("submit",async function(e){
-  e.preventDefault();
-  msg.style.color="#6b7280";
-  msg.textContent="Signing in…";
-  try{
-    const result=await db.auth.signInWithPassword({
-      email:emailInput.value.trim(),
-      password:passwordInput.value
-    });
-    if(result.error){
-      msg.style.color="#b91c1c";
-      msg.textContent=result.error.message;
-      return;
-    }
-    if(!result.data || !result.data.session){
-      msg.style.color="#b91c1c";
-      msg.textContent="Login did not create a session.";
-      return;
-    }
-    msg.textContent="";
-    dashboard();
-  }catch(err){
-    msg.style.color="#b91c1c";
-    msg.textContent="Login error: "+(err.message||err);
-  }
-});
-
-logoutBtn.addEventListener("click",async function(){
-  await db.auth.signOut();
-  loginScreen();
-  passwordInput.value="";
-  msg.textContent="";
-});
-
-const sectionInfo={
-  jobs:{title:"🔧 Jobs",text:"Repair jobs and job status.",actions:["New Job","View Jobs"]},
-  customers:{title:"👥 Customers",text:"Customer records and contact information.",actions:["New Customer","View Customers"]},
-  vehicles:{title:"🚗 Vehicles",text:"Vehicle records linked to customers.",actions:["Add Vehicle","View Vehicles"]},
-  payments:{title:"💰 Payments",text:"Payments, balances and job amounts.",actions:["New Payment","View Payments"]},
-  reports:{title:"📊 Weekend Report",text:"Manager reporting for the weekend.",actions:["Create Report","View Reports"]},
-  parts:{title:"📦 Parts",text:"Parts used or ordered for repair jobs.",actions:["Add Part","View Parts"]}
-};
-
-function scrollPanel(){
-  setTimeout(function(){
-    panel.scrollIntoView({behavior:"smooth",block:"start"});
-  },50);
-}
-
-function showJobsPanel(){
-  panel.innerHTML=`
-    <h3>🔧 Jobs</h3>
-    <p class="muted">Repair jobs and job status.</p>
-    <div class="section-actions">
-      <button type="button" id="newJobButton">New Job</button>
-      <button type="button" id="viewJobsButton">View Jobs</button>
-    </div>`;
-  panel.classList.remove("hidden");
-
-  document.getElementById("newJobButton").addEventListener("click",newJobForm);
-  document.getElementById("viewJobsButton").addEventListener("click",viewJobs);
-  scrollPanel();
-}
-
-function newJobForm(){
-  panel.innerHTML=`
-    <h3>🔧 New Repair Job</h3>
-    <p class="muted">Customer and vehicle information will be linked automatically.</p>
-
-    <form id="jobForm">
-      <h3>Customer</h3>
-
-      <label>Customer Name
-        <input id="jobCustomer" required placeholder="Customer name">
-      </label>
-
-      <div class="form-grid">
-        <label>Phone
-          <input id="jobPhone" type="tel" placeholder="Phone number">
-        </label>
-        <label>Email
-          <input id="jobEmail" type="email" placeholder="Email address">
-        </label>
-      </div>
-
-      <label>Address
-        <input id="jobAddress" placeholder="Customer address">
-      </label>
-
-      <h3>Vehicle</h3>
-
-      <div class="form-grid">
-        <label>Year
-          <input id="jobYear" type="number" min="1900" max="2100" placeholder="2020">
-        </label>
-        <label>Make
-          <input id="jobMake" placeholder="GMC">
-        </label>
-      </div>
-
-      <div class="form-grid">
-        <label>Model
-          <input id="jobModel" placeholder="Sierra">
-        </label>
-        <label>Licence Plate
-          <input id="jobPlate" placeholder="ABC 123">
-        </label>
-      </div>
-
-      <label>VIN
-        <input id="jobVin" placeholder="VIN">
-      </label>
-
-      <label>Mileage
-        <input id="jobMileage" type="number" min="0" placeholder="Mileage">
-      </label>
-
-      <h3>Repair</h3>
-
-      <label>Repair Description
-        <textarea id="jobDescription" required placeholder="Describe the repair work"></textarea>
-      </label>
-
-      <div class="form-grid">
-        <label>Estimate Amount ($)
-          <input id="jobEstimate" type="number" min="0" step="0.01" placeholder="0.00">
-        </label>
-        <label>Labour Amount ($)
-          <input id="jobLabour" type="number" min="0" step="0.01" placeholder="0.00">
-        </label>
-      </div>
-
-      <label>Parts Cost ($)
-        <input id="jobParts" type="number" min="0" step="0.01" placeholder="0.00">
-      </label>
-
-      <label>Status
-        <select id="jobStatus">
-          <option value="Open">Open</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Waiting for Parts">Waiting for Parts</option>
-          <option value="Ready">Ready</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-      </label>
-
-      <label>Notes
-        <textarea id="jobNotes" placeholder="Additional notes"></textarea>
-      </label>
-
-      <div class="section-actions">
-        <button type="submit">Save Job</button>
-        <button type="button" id="cancelJob" class="secondary">Cancel</button>
-      </div>
-
-      <p id="jobMsg" class="message"></p>
-    </form>`;
-
-  panel.classList.remove("hidden");
-  scrollPanel();
-
-  document.getElementById("cancelJob").addEventListener("click",showJobsPanel);
-
-  document.getElementById("jobForm").addEventListener("submit",saveJob);
-}
-
-async function saveJob(e){
-  e.preventDefault();
-
-  const jobMsg=document.getElementById("jobMsg");
-  jobMsg.style.color="#6b7280";
-  jobMsg.textContent="Saving customer, vehicle and job…";
-
-  const customerName=document.getElementById("jobCustomer").value.trim();
-  const phone=document.getElementById("jobPhone").value.trim();
-  const email=document.getElementById("jobEmail").value.trim();
-  const address=document.getElementById("jobAddress").value.trim();
-
-  const vehicleYear=document.getElementById("jobYear").value;
-  const vehicleMake=document.getElementById("jobMake").value.trim();
-  const vehicleModel=document.getElementById("jobModel").value.trim();
-  const plate=document.getElementById("jobPlate").value.trim();
-  const vin=document.getElementById("jobVin").value.trim();
-  const mileage=document.getElementById("jobMileage").value;
-
-  try{
-    /* 1. Create the customer */
-    const customerResult=await db.from("customers").insert({
-      name:customerName,
-      phone:phone || null,
-      email:email || null,
-      address:address || null
-    }).select("id").single();
-
-    if(customerResult.error) throw new Error("Customer: "+customerResult.error.message);
-
-    const customerId=customerResult.data.id;
-
-    /* 2. Create the vehicle */
-    const vehicleResult=await db.from("vehicles").insert({
-      customer_id:customerId,
-      year:vehicleYear ? Number(vehicleYear) : null,
-      make:vehicleMake || null,
-      model:vehicleModel || null,
-      vin:vin || null,
-      plate:plate || null,
-      mileage:mileage ? Number(mileage) : null
-    }).select("id").single();
-
-    if(vehicleResult.error) throw new Error("Vehicle: "+vehicleResult.error.message);
-
-    const vehicleId=vehicleResult.data.id;
-
-    /* 3. Create the repair job */
-    const estimate=Number(document.getElementById("jobEstimate").value||0);
-    const labour=Number(document.getElementById("jobLabour").value||0);
-    const parts=Number(document.getElementById("jobParts").value||0);
-
-    const jobResult=await db.from("repair_jobs").insert({
-      customer_id:customerId,
-      vehicle_id:vehicleId,
-      description:document.getElementById("jobDescription").value.trim(),
-      status:document.getElementById("jobStatus").value,
-      estimate_amount:estimate,
-      parts_cost:parts,
-      labour_amount:labour,
-      notes:document.getElementById("jobNotes").value.trim() || null
-    }).select("id,job_number").single();
-
-    if(jobResult.error) throw new Error("Repair job: "+jobResult.error.message);
-
-    jobMsg.style.color="#166534";
-    jobMsg.textContent="Job saved successfully ✓"+
-      (jobResult.data.job_number ? " Job #"+jobResult.data.job_number : "");
-
-    document.getElementById("jobForm").reset();
-
-  }catch(err){
-    jobMsg.style.color="#b91c1c";
-    jobMsg.textContent="Could not save: "+(err.message||err);
-  }
-}
-
-async function viewJobs(){
-  panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>Loading jobs…</p>";
-  panel.classList.remove("hidden");
-  scrollPanel();
-
-  const result=await db.from("repair_jobs")
-    .select("id,job_number,description,status,estimate_amount,parts_cost,labour_amount,date_received,created_at,customers(name,phone),vehicles(year,make,model,plate)")
-    .order("created_at",{ascending:false});
-
-  if(result.error){
-    panel.innerHTML="<h3>🔧 View Jobs</h3><p class='message'>Could not load jobs: "+escapeHtml(result.error.message)+"</p>";
-    return;
-  }
-
-  if(!result.data.length){
-    panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>No repair jobs yet.</p><div class='section-actions'><button type='button' id='newFromView'>New Job</button></div>";
-    document.getElementById("newFromView").addEventListener("click",newJobForm);
-    return;
-  }
-
-  panel.innerHTML="<h3>🔧 View Jobs</h3><p class='muted'>Latest repair jobs</p>"+
-    result.data.map(function(job){
-      const c=job.customers||{};
-      const v=job.vehicles||{};
-      const vehicle=[v.year,v.make,v.model].filter(Boolean).join(" ");
-      return `<div class="job-item">
-        <strong>${job.job_number ? "Job #"+escapeHtml(job.job_number)+" — " : ""}${escapeHtml(c.name||"No customer")}</strong>
-        <div class="job-meta">${escapeHtml(vehicle)} ${v.plate ? "• "+escapeHtml(v.plate):""}</div>
-        <div>${escapeHtml(job.description||"")}</div>
-        <div class="job-meta">Status: <b>${escapeHtml(job.status||"Open")}</b> • Estimate: $${Number(job.estimate_amount||0).toFixed(2)}</div>
-      </div>`;
-    }).join("")+
-    '<div class="section-actions"><button type="button" id="newFromView">New Job</button></div>';
-
-  document.getElementById("newFromView").addEventListener("click",newJobForm);
-}
-
-function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g,function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];
-  });
-}
-
-document.querySelectorAll(".tile").forEach(function(button){
-  button.addEventListener("click",function(){
-    const key=button.dataset.s;
-    const info=sectionInfo[key];
-
-    if(key==="jobs"){
-      showJobsPanel();
-      return;
-    }
-
-    panel.innerHTML="<h3>"+info.title+"</h3><p class='muted'>"+info.text+"</p><div class='section-actions'>"+
-      info.actions.map(function(action){
-        return "<button type='button'>"+action+"</button>";
-      }).join("")+"</div>";
-
-    panel.classList.remove("hidden");
-    scrollPanel();
-  });
-});
-
-db.auth.onAuthStateChange(function(event,session){
-  if(session) dashboard(); else loginScreen();
-});
-
-(async function(){
-  try{
-    const result=await db.auth.getSession();
-    if(result.error) throw result.error;
-    if(result.data.session) dashboard(); else loginScreen();
-  }catch(err){
-    loginScreen();
-    msg.style.color="#b91c1c";
-    msg.textContent="Supabase connection error: "+(err.message||err);
-  }
-})();
+const SUPABASE_URL="https://gwzfrsixcdsyczbpmfqq.supabase.co";
+const SUPABASE_KEY="sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const loginView=document.getElementById("login"),dashView=document.getElementById("dash"),logoutBtn=document.getElementById("logout"),form=document.getElementById("form"),loginButton=document.getElementById("loginButton"),emailInput=document.getElementById("email"),passwordInput=document.getElementById("password"),msg=document.getElementById("msg"),panel=document.getElementById("panel"),statusEl=document.getElementById("status");
+let isSavingJob=false;
+function dashboard(){loginView.classList.add("hidden");dashView.classList.remove("hidden");logoutBtn.classList.remove("hidden");statusEl.textContent="Connected to Supabase ✓"}
+function loginScreen(){dashView.classList.add("hidden");loginView.classList.remove("hidden");logoutBtn.classList.add("hidden")}
+function setMessage(element,text,type){element.style.color=type==="success"?"#166534":type==="info"?"#374151":"#b91c1c";element.textContent=text}
+form.addEventListener("submit",async function(e){e.preventDefault();if(loginButton.disabled)return;loginButton.disabled=true;loginButton.textContent="Signing in…";setMessage(msg,"Signing in…","info");try{const result=await db.auth.signInWithPassword({email:emailInput.value.trim(),password:passwordInput.value});if(result.error)throw result.error;if(!result.data||!result.data.session)throw new Error("Login did not create a session.");msg.textContent="";dashboard()}catch(err){setMessage(msg,"Login error: "+(err.message||err),"error")}finally{loginButton.disabled=false;loginButton.textContent="Sign in"}});
+logoutBtn.addEventListener("click",async function(){await db.auth.signOut();loginScreen();passwordInput.value="";msg.textContent=""});
+const sectionInfo={jobs:{title:"🔧 Jobs",text:"Repair jobs and job status.",actions:["New Job","View Jobs"]},customers:{title:"👥 Customers",text:"Customer records and contact information.",actions:["New Customer","View Customers"]},vehicles:{title:"🚗 Vehicles",text:"Vehicle records linked to customers.",actions:["Add Vehicle","View Vehicles"]},payments:{title:"💰 Payments",text:"Payments, balances and job amounts.",actions:["New Payment","View Payments"]},reports:{title:"📊 Weekend Report",text:"Manager reporting for the weekend.",actions:["Create Report","View Reports"]},parts:{title:"📦 Parts",text:"Parts used or ordered for repair jobs.",actions:["Add Part","View Parts"]}};
+function scrollPanel(){setTimeout(function(){panel.scrollIntoView({behavior:"smooth",block:"start"})},50)}
+function showJobsPanel(){panel.innerHTML='<h3>🔧 Jobs</h3><p class="muted">Repair jobs and job status.</p><div class="section-actions"><button type="button" id="newJobButton">New Job</button><button type="button" id="viewJobsButton">View Jobs</button></div>';panel.classList.remove("hidden");document.getElementById("newJobButton").addEventListener("click",newJobForm);document.getElementById("viewJobsButton").addEventListener("click",viewJobs);scrollPanel()}
+function newJobForm(){panel.innerHTML='<h3>🔧 New Repair Job</h3><p class="muted">Customer and vehicle information will be linked automatically.</p><form id="jobForm" novalidate><section class="form-section"><h3 class="form-heading">Customer</h3><label>Customer Name<input id="jobCustomer" required placeholder="Customer name" autocomplete="name"></label><div class="form-grid"><label>Phone<input id="jobPhone" type="tel" placeholder="Phone number" autocomplete="tel" inputmode="tel"></label><label>Email<input id="jobEmail" type="email" placeholder="Email address" autocomplete="email" inputmode="email"></label></div><label>Address<input id="jobAddress" placeholder="Customer address" autocomplete="street-address"></label></section><section class="form-section"><h3 class="form-heading">Vehicle</h3><div class="form-grid"><label>Year<input id="jobYear" type="number" min="1900" max="2100" placeholder="2020" inputmode="numeric"></label><label>Make<input id="jobMake" placeholder="GMC"></label></div><div class="form-grid"><label>Model<input id="jobModel" placeholder="Sierra"></label><label>Licence Plate<input id="jobPlate" placeholder="ABC 123"></label></div><label>VIN<input id="jobVin" placeholder="VIN" autocapitalize="characters"></label><label>Mileage<input id="jobMileage" type="number" min="0" placeholder="Mileage" inputmode="numeric"></label></section><section class="form-section"><h3 class="form-heading">Repair</h3><label>Repair Description<textarea id="jobDescription" required placeholder="Describe the repair work"></textarea></label><div class="form-grid"><label>Estimate Amount ($)<input id="jobEstimate" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"></label><label>Labour Amount ($)<input id="jobLabour" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"></label></div><label>Parts Cost ($)<input id="jobParts" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal"></label><label>Status<select id="jobStatus"><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Waiting for Parts">Waiting for Parts</option><option value="Ready">Ready</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select></label><label>Notes<textarea id="jobNotes" placeholder="Additional notes"></textarea></label></section><div class="section-actions"><button id="saveJobButton" type="submit">Save Job</button><button type="button" id="cancelJob" class="secondary">Cancel</button></div><p id="jobMsg" class="message" role="status" aria-live="polite"></p></form>';panel.classList.remove("hidden");scrollPanel();document.getElementById("cancelJob").addEventListener("click",function(){if(!isSavingJob)showJobsPanel()});document.getElementById("jobForm").addEventListener("submit",saveJob)}
+function optionalNumber(id){const value=document.getElementById(id).value;return value===""?null:Number(value)}
+async function saveJob(e){e.preventDefault();const jobForm=document.getElementById("jobForm"),jobMsg=document.getElementById("jobMsg"),saveButton=document.getElementById("saveJobButton");if(isSavingJob)return;if(!jobForm.checkValidity()){jobForm.reportValidity();setMessage(jobMsg,"Please complete the required fields and correct any highlighted values.","error");return}isSavingJob=true;saveButton.disabled=true;saveButton.textContent="Saving…";setMessage(jobMsg,"Saving customer, vehicle and job…","info");const customerName=document.getElementById("jobCustomer").value.trim(),phone=document.getElementById("jobPhone").value.trim(),email=document.getElementById("jobEmail").value.trim(),address=document.getElementById("jobAddress").value.trim(),vehicleMake=document.getElementById("jobMake").value.trim(),vehicleModel=document.getElementById("jobModel").value.trim(),plate=document.getElementById("jobPlate").value.trim(),vin=document.getElementById("jobVin").value.trim();try{const customerResult=await db.from("customers").insert({name:customerName,phone:phone||null,email:email||null,address:address||null}).select("id").single();if(customerResult.error)throw new Error("Customer: "+customerResult.error.message);const customerId=customerResult.data.id;const vehicleResult=await db.from("vehicles").insert({customer_id:customerId,year:optionalNumber("jobYear"),make:vehicleMake||null,model:vehicleModel||null,vin:vin||null,plate:plate||null,mileage:optionalNumber("jobMileage")}).select("id").single();if(vehicleResult.error)throw new Error("Vehicle: "+vehicleResult.error.message);const vehicleId=vehicleResult.data.id;const jobResult=await db.from("repair_jobs").insert({customer_id:customerId,vehicle_id:vehicleId,description:document.getElementById("jobDescription").value.trim(),status:document.getElementById("jobStatus").value,estimate_amount:optionalNumber("jobEstimate")||0,parts_cost:optionalNumber("jobParts")||0,labour_amount:optionalNumber("jobLabour")||0,notes:document.getElementById("jobNotes").value.trim()||null}).select("id,job_number").single();if(jobResult.error)throw new Error("Repair job: "+jobResult.error.message);setMessage(jobMsg,"Job saved successfully ✓"+(jobResult.data.job_number?" Job #"+jobResult.data.job_number:""),"success");jobForm.reset()}catch(err){setMessage(jobMsg,"Could not save: "+(err.message||err)+". If the error occurred after customer or vehicle creation, a partial record may exist; please check before retrying.","error")}finally{isSavingJob=false;saveButton.disabled=false;saveButton.textContent="Save Job"}}
+async function viewJobs(){panel.innerHTML='<h3>🔧 View Jobs</h3><p class="muted">Loading jobs…</p>';panel.classList.remove("hidden");scrollPanel();const result=await db.from("repair_jobs").select("id,job_number,description,status,estimate_amount,parts_cost,labour_amount,date_received,created_at,customers(name,phone),vehicles(year,make,model,plate)").order("created_at",{ascending:false});if(result.error){panel.innerHTML='<h3>🔧 View Jobs</h3><p class="message">Could not load jobs: '+escapeHtml(result.error.message)+"</p>";return}if(!result.data.length){panel.innerHTML='<h3>🔧 View Jobs</h3><p class="muted">No repair jobs yet.</p><div class="section-actions"><button type="button" id="newFromView">New Job</button></div>';document.getElementById("newFromView").addEventListener("click",newJobForm);return}panel.innerHTML='<h3>🔧 View Jobs</h3><p class="muted">Latest repair jobs</p>'+result.data.map(function(job){const c=job.customers||{},v=job.vehicles||{},vehicle=[v.year,v.make,v.model].filter(Boolean).join(" ");return '<article class="job-item"><strong>'+(job.job_number?"Job #"+escapeHtml(job.job_number)+" — ":"")+escapeHtml(c.name||"No customer")+'</strong><div class="job-meta">'+escapeHtml(vehicle)+(v.plate?" • "+escapeHtml(v.plate):"")+"</div><p>"+escapeHtml(job.description||"")+'</p><span class="job-status">'+escapeHtml(job.status||"Open")+'</span><div class="job-meta job-amount">Estimate: $'+Number(job.estimate_amount||0).toFixed(2)+"</div></article>"}).join("")+'<div class="section-actions"><button type="button" id="newFromView">New Job</button></div>';document.getElementById("newFromView").addEventListener("click",newJobForm)}
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
+document.querySelectorAll(".tile").forEach(function(button){button.addEventListener("click",function(){const key=button.dataset.s,info=sectionInfo[key];if(key==="jobs"){showJobsPanel();return}panel.innerHTML="<h3>"+info.title+"</h3><p class='muted'>"+info.text+"</p><div class='section-actions'>"+info.actions.map(function(action){return "<button type='button'>"+action+"</button>"}).join("")+"</div>";panel.classList.remove("hidden");scrollPanel()})});
+db.auth.onAuthStateChange(function(event,session){if(session)dashboard();else loginScreen()});
+(async function(){try{const result=await db.auth.getSession();if(result.error)throw result.error;if(result.data.session)dashboard();else loginScreen()}catch(err){loginScreen();setMessage(msg,"Supabase connection error: "+(err.message||err),"error")}})();
 </script>
 </body>
 </html>
