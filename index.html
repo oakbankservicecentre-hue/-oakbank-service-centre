@@ -30,9 +30,12 @@ button:disabled{opacity:.6}.secondary{background:#4b5563}.hidden{display:none!im
 .invoice-table th:last-child,.invoice-table td:last-child{text-align:right}.invoice-total{max-width:330px;margin:15px 0 0 auto}
 .invoice-total div{display:flex;justify-content:space-between;padding:6px 0}.invoice-total .grand{border-top:2px solid #111827;font-size:19px;font-weight:800;padding-top:9px}
 .invoice-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.tax-card{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin:12px 0;background:#fff}.tax-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tax-grid>div{border:1px solid #e5e7eb;border-radius:10px;padding:10px}.tax-grid b{display:block;font-size:18px;margin-top:5px}.book-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}.book-table th,.book-table td{border-bottom:1px solid #e5e7eb;padding:7px;text-align:left}.report-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}@media(max-width:650px){.tax-grid{grid-template-columns:1fr}.book-table{font-size:11px;display:block;overflow-x:auto}}
 @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:650px){.form-grid,.invoice-grid,.stats{grid-template-columns:1fr}.section-actions{flex-direction:column}.section-actions button{width:100%}.invoice-head{flex-direction:column}.tile{min-height:100px}}
 @media print{body{background:#fff}header,#login,#dash>.top,#dash>.grid,#dash>.connection{display:none!important}main{padding:0;max-width:none}.panel{display:block!important;box-shadow:none;margin:0;padding:0}.invoice-actions{display:none!important}.invoice{max-width:none}}
+
+.book-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}.book-table th,.book-table td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:left}.book-table th:last-child,.book-table td:last-child{text-align:right}.book-total{font-weight:800;background:#f9fafb}.tax-card{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin-top:12px}.tax-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tax-grid b{display:block;font-size:18px;margin-top:3px}.report-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.report-actions button{flex:1;min-width:150px}@media(max-width:650px){.tax-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -261,112 +264,114 @@ async function viewJobs(){
 
 /* PARTS */
 async function parts(){
-  panelHeader("📦 Parts","Add parts to repair jobs and review job parts.","<button id='ap'>Add Part</button><button id='vp'>View Parts</button>");
-  document.getElementById("ap").onclick=partForm;document.getElementById("vp").onclick=viewParts
+  panelHeader("📦 Parts","Add, edit and review job parts, including GST/PST.","<button id='ap'>Add Part</button><button id='vp'>View Parts</button>");
+  document.getElementById("ap").onclick=function(){partForm()};document.getElementById("vp").onclick=viewParts
 }
-async function partForm(){
-  const jobs=await jobOptions();
-  panel.innerHTML="<h3>📦 Add Part</h3><form id='pf'><label>Job<select id='pj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"'>#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+" — "+esc(j.description||"")+"</option>").join("")+"</select></label><div class='form-grid'><label>Part Name<input id='pn' required></label><label>Part Number<input id='ppn'></label></div><label>Supplier<input id='ps'></label><div class='form-grid'><label>Quantity<input id='pq' type='number' min='1' value='1'></label><label>Cost ($)<input id='pc' type='number' min='0' step='0.01' value='0'></label></div><label>Selling Price ($)<input id='psp' type='number' min='0' step='0.01' value='0'></label><div class='form-grid'><label>GST 5%<select id='pgst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='ppst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><div class='section-actions'><button>Add Part</button><button type='button' id='pcc' class='secondary'>Cancel</button></div><p id='pm' class='message'></p></form>";
+async function partForm(part){
+  const jobs=await jobOptions();part=part||{};
+  const qty=Number(part.quantity||1),sell=Number(part.sell_price||0),base=qty*sell;
+  panel.innerHTML="<h3>"+(part.id?"Edit Part":"Add Part")+"</h3><form id='pf'><label>Job<select id='pj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"' "+(part.job_id===j.id?"selected":"")+">#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+" — "+esc(j.description||"")+"</option>").join("")+"</select></label><div class='form-grid'><label>Part Name<input id='pn' required value='"+esc(part.part_name)+"'></label><label>Part Number<input id='ppn' value='"+esc(part.part_number)+"'></label></div><label>Supplier<input id='ps' value='"+esc(part.supplier)+"'></label><div class='form-grid'><label>Quantity<input id='pq' type='number' min='1' value='"+qty+"'></label><label>Cost ($)<input id='pc' type='number' min='0' step='0.01' value='"+Number(part.cost||0).toFixed(2)+"'></label></div><label>Selling Price ($)<input id='psp' type='number' min='0' step='0.01' value='"+sell.toFixed(2)+"'></label><div class='form-grid'><label>GST 5%<select id='pgst'><option value='false' "+(!part.gst_enabled?"selected":"")+">No</option><option value='true' "+(part.gst_enabled?"selected":"")+">Yes</option></select></label><label>PST 7%<select id='ppst'><option value='false' "+(!part.pst_enabled?"selected":"")+">No</option><option value='true' "+(part.pst_enabled?"selected":"")+">Yes</option></select></label></div><div class='meta'>Tax is calculated from selling price × quantity.</div><div class='section-actions'><button>"+(part.id?"Save Part":"Add Part")+"</button><button type='button' id='pcc' class='secondary'>Cancel</button></div><p id='pm' class='message'></p></form>";
   panel.classList.remove("hidden");scroll();document.getElementById("pcc").onclick=parts;
   document.getElementById("pf").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("job_parts").insert({job_id:document.getElementById("pj").value,part_name:document.getElementById("pn").value.trim(),part_number:document.getElementById("ppn").value.trim()||null,supplier:document.getElementById("ps").value.trim()||null,quantity:Number(document.getElementById("pq").value)||1,cost:Number(document.getElementById("pc").value)||0,sell_price:Number(document.getElementById("psp").value)||0,gst_enabled:document.getElementById("pgst").value==="true",pst_enabled:document.getElementById("ppst").value==="true",gst_amount:taxAmounts(Number(document.getElementById("psp").value)||0,document.getElementById("pgst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("psp").value)||0,false,document.getElementById("ppst").value==="true").pst});
-    const m=document.getElementById("pm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Part added ✓";setTimeout(viewParts,400)
+    e.preventDefault();const qty=Number(document.getElementById("pq").value)||1,sell=Number(document.getElementById("psp").value)||0,g=document.getElementById("pgst").value==="true",p=document.getElementById("ppst").value==="true",tax=taxAmounts(qty*sell,g,p);
+    const data={job_id:document.getElementById("pj").value,part_name:document.getElementById("pn").value.trim(),part_number:document.getElementById("ppn").value.trim()||null,supplier:document.getElementById("ps").value.trim()||null,quantity:qty,cost:Number(document.getElementById("pc").value)||0,sell_price:sell,gst_enabled:g,pst_enabled:p,gst_amount:tax.gst,pst_amount:tax.pst};
+    const r=part.id?await db.from("job_parts").update(data).eq("id",part.id):await db.from("job_parts").insert(data);
+    const m=document.getElementById("pm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Saved ✓";setTimeout(viewParts,400)
   }
 }
 async function viewParts(){
   const r=await db.from("job_parts").select("*,repair_jobs(job_number,customers(name))").order("created_at",{ascending:false});
-  panel.innerHTML="<h3>📦 Parts</h3>"+((r.data||[]).map(p=>"<div class='item'><strong>"+esc(p.part_name)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+"</div><div>Qty "+p.quantity+" • Sell "+money(p.sell_price)+"</div></div>").join("")||"<p class='muted'>No parts yet.</p>");
-  panel.classList.remove("hidden");scroll()
+  panel.innerHTML="<h3>📦 Parts</h3><p class='muted'>Every part keeps its quantity, cost, selling price and GST/PST settings.</p>"+((r.data||[]).map(p=>"<div class='item'><strong>"+esc(p.part_name)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+(p.part_number?" • Part #: "+esc(p.part_number):"")+"</div><div>Qty "+esc(p.quantity)+" • Cost "+money(p.cost)+" • Sell "+money(p.sell_price)+" • Tax base "+money(Number(p.sell_price||0)*Number(p.quantity||1))+"</div><div class='meta'>GST: "+money(p.gst_amount)+" • PST: "+money(p.pst_amount)+"</div><div class='section-actions'><button data-pe='"+p.id+"'>Edit</button></div></div>").join("")||"<p class='muted'>No parts yet.</p>");
+  panel.classList.remove("hidden");scroll();document.querySelectorAll("[data-pe]").forEach(function(b){b.onclick=function(){partForm((r.data||[]).find(x=>x.id===b.dataset.pe))}})
 }
 
 /* PAYMENTS */
 async function payments(){
-  panelHeader("💰 Payments","Record payments and see job balances.","<button id='np'>New Payment</button><button id='vpmt'>View Payments</button>");
-  document.getElementById("np").onclick=paymentForm;document.getElementById("vpmt").onclick=viewPayments
+  panelHeader("💰 Payments","Record, edit and review payments with GST/PST.","<button id='np'>New Payment</button><button id='vpmt'>View Payments</button>");
+  document.getElementById("np").onclick=function(){paymentForm()};document.getElementById("vpmt").onclick=viewPayments
 }
-async function paymentForm(){
-  const jobs=await jobOptions();
-  panel.innerHTML="<h3>💰 New Payment</h3><form id='payf'><label>Job<select id='payj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"'>#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+"</option>").join("")+"</select></label><label>Amount ($)<input id='paya' type='number' min='0.01' step='0.01' required></label><label>Payment Method<select id='paym'><option>cash</option><option>debit</option><option>credit</option><option>etransfer</option><option>other</option></select></label><div id='paymentTaxBox'><div class='form-grid'><label>GST 5%<select id='paygst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='paypst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><div class='meta'>Tax is optional. For cash payments, choose whether GST/PST applies.</div></div><label>Date<input id='payd' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label><label>Notes<textarea id='payn'></textarea></label><div class='section-actions'><button>Save Payment</button><button type='button' id='payc' class='secondary'>Cancel</button></div><p id='paymsg' class='message'></p></form>";
+async function paymentForm(payment){
+  const jobs=await jobOptions();payment=payment||{};
+  panel.innerHTML="<h3>"+(payment.id?"Edit Payment":"New Payment")+"</h3><form id='payf'><label>Job<select id='payj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"' "+(payment.job_id===j.id?"selected":"")+">#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+" — "+esc(j.description||"")+"</option>").join("")+"</select></label><label>Amount ($)<input id='paya' type='number' min='0.01' step='0.01' required value='"+esc(payment.amount||"")+"'></label><label>Payment Method<select id='paym'>"+["cash","debit","credit","etransfer","other"].map(x=>"<option value='"+x+"' "+((payment.payment_method||"cash")===x?"selected":"")+">"+x+"</option>").join("")+"</select></label><div id='paymentTaxBox'><div class='form-grid'><label>GST 5%<select id='paygst'><option value='false' "+(!payment.gst_enabled?"selected":"")+">No</option><option value='true' "+(payment.gst_enabled?"selected":"")+">Yes</option></select></label><label>PST 7%<select id='paypst'><option value='false' "+(!payment.pst_enabled?"selected":"")+">No</option><option value='true' "+(payment.pst_enabled?"selected":"")+">Yes</option></select></label></div><div class='meta'>Tax is optional. For cash payments, choose whether GST/PST applies.</div></div><label>Date<input id='payd' type='date' value='"+esc(payment.payment_date||new Date().toISOString().slice(0,10))+"'></label><label>Notes<textarea id='payn'>"+esc(payment.notes)+"</textarea></label><div class='section-actions'><button>"+(payment.id?"Save Payment":"Save Payment")+"</button><button type='button' id='payc' class='secondary'>Cancel</button></div><p id='paymsg' class='message'></p></form>";
   panel.classList.remove("hidden");scroll();document.getElementById("payc").onclick=payments;
-  document.getElementById("paym").onchange=function(){document.getElementById("paymentTaxBox").style.opacity=this.value==="cash"?"1":".85"};
   document.getElementById("payf").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("payments").insert({job_id:document.getElementById("payj").value,amount:Number(document.getElementById("paya").value),payment_method:document.getElementById("paym").value,payment_date:document.getElementById("payd").value,gst_enabled:document.getElementById("paygst").value==="true",pst_enabled:document.getElementById("paypst").value==="true",gst_amount:taxAmounts(Number(document.getElementById("paya").value)||0,document.getElementById("paygst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("paya").value)||0,false,document.getElementById("paypst").value==="true").pst,notes:document.getElementById("payn").value.trim()||null});
+    e.preventDefault();const amount=Number(document.getElementById("paya").value)||0,g=document.getElementById("paygst").value==="true",p=document.getElementById("paypst").value==="true",tax=taxAmounts(amount,g,p);
+    const data={job_id:document.getElementById("payj").value,amount,payment_method:document.getElementById("paym").value,payment_date:document.getElementById("payd").value,gst_enabled:g,pst_enabled:p,gst_amount:tax.gst,pst_amount:tax.pst,notes:document.getElementById("payn").value.trim()||null};
+    const r=payment.id?await db.from("payments").update(data).eq("id",payment.id):await db.from("payments").insert(data);
     const m=document.getElementById("paymsg");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Payment saved ✓";loadStats();setTimeout(viewPayments,400)
   }
 }
 async function viewPayments(){
   const r=await db.from("payments").select("*,repair_jobs(job_number,customers(name))").order("payment_date",{ascending:false});
-  panel.innerHTML="<h3>💰 Payments</h3>"+((r.data||[]).map(p=>"<div class='item'><strong>"+money(p.amount)+" — "+esc(p.payment_method)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+" • "+esc(p.payment_date)+"</div></div>").join("")||"<p class='muted'>No payments yet.</p>");
-  panel.classList.remove("hidden");scroll()
+  panel.innerHTML="<h3>💰 Payments</h3><p class='muted'>Every payment keeps its GST/PST selection and amount for bookkeeping.</p>"+((r.data||[]).map(p=>"<div class='item'><strong>"+money(p.amount)+" — "+esc(p.payment_method)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+" • "+esc(p.payment_date)+"</div><div class='meta'>GST: "+money(p.gst_amount)+" • PST: "+money(p.pst_amount)+" • Base: "+money(p.amount)+"</div>"+(p.notes?"<div class='meta'>Notes: "+esc(p.notes)+"</div>":"")+"<div class='section-actions'><button data-paye='"+p.id+"'>Edit</button></div></div>").join("")||"<p class='muted'>No payments yet.</p>");
+  panel.classList.remove("hidden");scroll();document.querySelectorAll("[data-paye]").forEach(function(b){b.onclick=function(){paymentForm((r.data||[]).find(x=>x.id===b.dataset.paye))}})
 }
 
 /* EXPENSES */
 async function expenses(){
-  panelHeader("🧾 Shop Expenses","Track shop operating expenses.","<button id='ne'>New Expense</button><button id='ve'>View Expenses</button>");
-  document.getElementById("ne").onclick=expenseForm;document.getElementById("ve").onclick=viewExpenses
+  panelHeader("🧾 Shop Expenses","Track, edit and review expenses with GST/PST.","<button id='ne'>New Expense</button><button id='ve'>View Expenses</button>");
+  document.getElementById("ne").onclick=function(){expenseForm()};document.getElementById("ve").onclick=viewExpenses
 }
-function expenseForm(){
-  panel.innerHTML="<h3>🧾 New Shop Expense</h3><form id='ef'><label>Date<input id='ed' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label><label>Category<input id='ec' placeholder='Parts, rent, supplies, utilities…'></label><label>Description<input id='exd'></label><label>Amount ($)<input id='ea' type='number' min='0' step='0.01' required></label><div class='form-grid'><label>GST 5%<select id='egst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='epst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><label>Notes<textarea id='en'></textarea></label><div class='section-actions'><button>Save Expense</button><button type='button' id='ecc' class='secondary'>Cancel</button></div><p id='em' class='message'></p></form>";
+function expenseForm(expense){
+  expense=expense||{};const gst=Number(expense.gst_amount||0)>0,pst=Number(expense.pst_amount||0)>0;
+  panel.innerHTML="<h3>"+(expense.id?"Edit Shop Expense":"New Shop Expense")+"</h3><form id='ef'><label>Date<input id='ed' type='date' value='"+esc(expense.expense_date||new Date().toISOString().slice(0,10))+"'></label><label>Category<input id='ec' placeholder='Parts, rent, supplies, utilities…' value='"+esc(expense.category)+"'></label><label>Description<input id='exd' value='"+esc(expense.description)+"'></label><label>Amount ($)<input id='ea' type='number' min='0' step='0.01' required value='"+esc(expense.amount||"")+"'></label><div class='form-grid'><label>GST 5%<select id='egst'><option value='false' "+(!gst?"selected":"")+">No</option><option value='true' "+(gst?"selected":"")+">Yes</option></select></label><label>PST 7%<select id='epst'><option value='false' "+(!pst?"selected":"")+">No</option><option value='true' "+(pst?"selected":"")+">Yes</option></select></label></div><label>Notes<textarea id='en'>"+esc(expense.notes)+"</textarea></label><div class='section-actions'><button>Save Expense</button><button type='button' id='ecc' class='secondary'>Cancel</button></div><p id='em' class='message'></p></form>";
   panel.classList.remove("hidden");scroll();document.getElementById("ecc").onclick=expenses;
   document.getElementById("ef").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("shop_expenses").insert({expense_date:document.getElementById("ed").value,category:document.getElementById("ec").value.trim(),description:document.getElementById("exd").value.trim(),amount:Number(document.getElementById("ea").value),gst_amount:taxAmounts(Number(document.getElementById("ea").value)||0,document.getElementById("egst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("ea").value)||0,false,document.getElementById("epst").value==="true").pst,notes:document.getElementById("en").value.trim()||null});
+    e.preventDefault();const amount=Number(document.getElementById("ea").value)||0,g=document.getElementById("egst").value==="true",pst=document.getElementById("epst").value==="true",tax=taxAmounts(amount,g,pst);
+    const data={expense_date:document.getElementById("ed").value,category:document.getElementById("ec").value.trim(),description:document.getElementById("exd").value.trim(),amount,gst_amount:tax.gst,pst_amount:tax.pst,notes:document.getElementById("en").value.trim()||null};
+    const r=expense.id?await db.from("shop_expenses").update(data).eq("id",expense.id):await db.from("shop_expenses").insert(data);
     const m=document.getElementById("em");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Expense saved ✓";setTimeout(viewExpenses,400)
   }
 }
 async function viewExpenses(){
   const r=await db.from("shop_expenses").select("*").order("expense_date",{ascending:false});
-  panel.innerHTML="<h3>🧾 Shop Expenses</h3>"+((r.data||[]).map(x=>"<div class='item'><strong>"+money(x.amount)+" — "+esc(x.category)+"</strong><div class='meta'>"+esc(x.expense_date)+" • "+esc(x.description)+"</div></div>").join("")||"<p class='muted'>No expenses yet.</p>");
-  panel.classList.remove("hidden");scroll()
+  panel.innerHTML="<h3>🧾 Shop Expenses</h3><p class='muted'>Every expense keeps its GST/PST amounts for bookkeeping.</p>"+((r.data||[]).map(x=>"<div class='item'><strong>"+money(x.amount)+" — "+esc(x.category)+"</strong><div class='meta'>"+esc(x.expense_date)+" • "+esc(x.description)+"</div><div class='meta'>GST: "+money(x.gst_amount)+" • PST: "+money(x.pst_amount)+" • Total tax: "+money(Number(x.gst_amount||0)+Number(x.pst_amount||0))+"</div>"+(x.notes?"<div class='meta'>Notes: "+esc(x.notes)+"</div>":"")+"<div class='section-actions'><button data-expe='"+x.id+"'>Edit</button></div></div>").join("")||"<p class='muted'>No expenses yet.</p>");
+  panel.classList.remove("hidden");scroll();document.querySelectorAll("[data-expe]").forEach(function(b){b.onclick=function(){expenseForm((r.data||[]).find(x=>x.id===b.dataset.expe))}})
 }
 
-/* REPORTS */
+/* BOOKKEEPING / REPORTS */
 async function reports(){
-  panelHeader("📊 Weekend Reports","Create and review manager reports.","<button id='nr'>Create Report</button><button id='vr'>View Reports</button>");
+  panelHeader("📊 Bookkeeping & Weekend Reports","Pick a date range. GST/PST totals are calculated automatically from saved payments and expenses.","<button id='nr'>New Bookkeeping Report</button><button id='vr'>Saved Reports</button>");
   document.getElementById("nr").onclick=reportForm;document.getElementById("vr").onclick=viewReports
 }
+function recentWeekend(){
+  const d=new Date();d.setHours(12,0,0,0);const day=d.getDay();let sat=new Date(d),sun=new Date(d);if(day===0){sat.setDate(d.getDate()-1)}else if(day===6){sun.setDate(d.getDate()+1)}else{const back=day+1;sat.setDate(d.getDate()-back);sun.setDate(d.getDate()-(day));}return{from:sat.toISOString().slice(0,10),to:sun.toISOString().slice(0,10)}
+}
 function reportForm(){
-  panel.innerHTML="<h3>📊 Weekend Reports</h3><p class='muted'>Create a weekend report and automatically separate GST/PST for payments and expenses.</p><form id='rf'>"+
-  "<label>Report Date<input id='rd' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label>"+
-  "<label>Jobs Completed<input id='rj' type='number' min='0' value='0'></label>"+
-  "<label>Revenue ($)<input id='rr' type='number' min='0' step='0.01' value='0'></label>"+
-  "<div class='form-grid'><label>Parts Expense ($)<input id='rp' type='number' min='0' step='0.01' value='0'></label><label>Labour Expense ($)<input id='rl' type='number' min='0' step='0.01' value='0'></label></div>"+
-  "<label>Other Expense ($)<input id='ro' type='number' min='0' step='0.01' value='0'></label>"+
-  "<label>Outstanding Amount ($)<input id='rout' type='number' min='0' step='0.01' value='0'></label>"+
-  "<label>Manager Notes<textarea id='rn'></textarea></label>"+
-  "<div class='section-actions'><button>Save Report</button><button type='button' id='taxpreview' class='secondary'>Generate GST/PST Tax Report</button><button type='button' id='rcc' class='secondary'>Cancel</button></div>"+
-  "<p id='rm' class='message'></p><div id='taxresult'></div></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("rcc").onclick=reports;
-  document.getElementById("taxpreview").onclick=generateTaxReport;
-  document.getElementById("rf").onsubmit=async function(e){
-    e.preventDefault();
-    const d={report_date:document.getElementById("rd").value,jobs_completed:Number(document.getElementById("rj").value)||0,revenue:Number(document.getElementById("rr").value)||0,parts_expense:Number(document.getElementById("rp").value)||0,labour_expense:Number(document.getElementById("rl").value)||0,other_expense:Number(document.getElementById("ro").value)||0,outstanding_amount:Number(document.getElementById("rout").value)||0,manager_notes:document.getElementById("rn").value.trim()||null};
-    const tax=await calculateTaxForDate(document.getElementById("rd").value,document.getElementById("rd").value);
-    if(tax.error){document.getElementById("rm").textContent=tax.error;return}
-    d.payment_gst=tax.paymentGst;d.payment_pst=tax.paymentPst;d.expense_gst=tax.expenseGst;d.expense_pst=tax.expensePst;d.net_gst=tax.paymentGst-tax.expenseGst;d.net_pst=tax.paymentPst-tax.expensePst;
-    const r=await db.from("weekend_reports").upsert(d,{onConflict:"report_date"});
-    const m=document.getElementById("rm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Report saved ✓";setTimeout(viewReports,400)
-  }
+  const w=recentWeekend();
+  panel.innerHTML="<h3>📊 Bookkeeping Report</h3><p class='muted'>This report works like a spreadsheet: change the dates and the totals update automatically. No manual tax calculation.</p><div class='form-grid'><label>From<input id='rfrom' type='date' value='"+w.from+"'></label><label>To<input id='rto' type='date' value='"+w.to+"'></label></div><div id='bookreport'>Loading…</div><div class='report-actions'><button id='saverpt'>Save Report</button><button id='printrpt' class='secondary'>🖨️ Print</button><button id='csvrpt' class='secondary'>⬇️ CSV</button><button id='rcc' class='secondary'>Back</button></div><p id='rm' class='message'></p>";
+  panel.classList.remove("hidden");scroll();
+  document.getElementById("rcc").onclick=reports;document.getElementById("rfrom").onchange=refreshBookkeeping;document.getElementById("rto").onchange=refreshBookkeeping;document.getElementById("printrpt").onclick=function(){window.print()};document.getElementById("csvrpt").onclick=downloadBookkeepingCSV;document.getElementById("saverpt").onclick=saveBookkeepingReport;refreshBookkeeping();
 }
-async function calculateTaxForDate(from,to){
-  const [p,e]=await Promise.all([
-    db.from("payments").select("amount,gst_amount,pst_amount,payment_date").gte("payment_date",from).lte("payment_date",to),
-    db.from("shop_expenses").select("amount,gst_amount,pst_amount,expense_date").gte("expense_date",from).lte("expense_date",to)
+async function calculateBookkeeping(from,to){
+  const [p,e,j]=await Promise.all([
+    db.from("payments").select("id,amount,gst_amount,pst_amount,payment_method,payment_date,job_id,repair_jobs(job_number,customers(name))").gte("payment_date",from).lte("payment_date",to).order("payment_date"),
+    db.from("shop_expenses").select("id,amount,gst_amount,pst_amount,category,description,expense_date").gte("expense_date",from).lte("expense_date",to).order("expense_date"),
+    db.from("repair_jobs").select("id,job_number,status,date_received,final_amount,estimate_amount,gst_amount,pst_amount,customers(name)").gte("date_received",from).lte("date_received",to)
   ]);
-  if(p.error||e.error)return{error:(p.error||e.error).message};
-  return{paymentGst:(p.data||[]).reduce((s,x)=>s+Number(x.gst_amount||0),0),paymentPst:(p.data||[]).reduce((s,x)=>s+Number(x.pst_amount||0),0),expenseGst:(e.data||[]).reduce((s,x)=>s+Number(x.gst_amount||0),0),expensePst:(e.data||[]).reduce((s,x)=>s+Number(x.pst_amount||0),0)}
+  if(p.error||e.error||j.error)return{error:(p.error||e.error||j.error).message};
+  const payments=p.data||[],expenses=e.data||[],jobs=j.data||[];
+  const sum=(a,k)=>a.reduce((s,x)=>s+Number(x[k]||0),0);
+  return{payments,expenses,jobs,paymentBase:sum(payments,"amount"),paymentGst:sum(payments,"gst_amount"),paymentPst:sum(payments,"pst_amount"),expenseBase:sum(expenses,"amount"),expenseGst:sum(expenses,"gst_amount"),expensePst:sum(expenses,"pst_amount"),jobsCompleted:jobs.filter(x=>["Completed","completed","Picked Up","picked_up"].includes(x.status)).length,revenue:sum(payments,"amount")}
 }
-async function generateTaxReport(){
-  const d=document.getElementById("rd").value;
-  const tax=await calculateTaxForDate(d,d);if(tax.error){document.getElementById("taxresult").innerHTML="<p class='message'>"+esc(tax.error)+"</p>";return}
-  document.getElementById("taxresult").innerHTML="<div class='item'><strong>GST / PST Tax Report — "+esc(d)+"</strong><div class='meta'>Payments</div><div>GST: "+money(tax.paymentGst)+" • PST: "+money(tax.paymentPst)+"</div><div class='meta' style='margin-top:8px'>Expenses</div><div>GST: "+money(tax.expenseGst)+" • PST: "+money(tax.expensePst)+"</div><div class='meta' style='margin-top:8px'>Net tax</div><div><b>GST: "+money(tax.paymentGst-tax.expenseGst)+" • PST: "+money(tax.paymentPst-tax.expensePst)+"</b></div></div>"
+let lastBookkeeping=null;
+async function refreshBookkeeping(){
+  const from=document.getElementById("rfrom").value,to=document.getElementById("rto").value;if(!from||!to)return;
+  const box=document.getElementById("bookreport");box.innerHTML="Loading automatic bookkeeping totals…";const x=await calculateBookkeeping(from,to);if(x.error){box.innerHTML="<p class='message'>"+esc(x.error)+"</p>";return}lastBookkeeping=x;
+  box.innerHTML="<div class='tax-card'><h4>PAYMENTS RECEIVED</h4><div class='tax-grid'><div>Payment base<b>"+money(x.paymentBase)+"</b></div><div>GST 5%<b>"+money(x.paymentGst)+"</b></div><div>PST 7%<b>"+money(x.paymentPst)+"</b></div></div></div><div class='tax-card'><h4>EXPENSES</h4><div class='tax-grid'><div>Expense base<b>"+money(x.expenseBase)+"</b></div><div>GST 5%<b>"+money(x.expenseGst)+"</b></div><div>PST 7%<b>"+money(x.expensePst)+"</b></div></div></div><div class='tax-card'><h4>NET TAX</h4><div class='tax-grid'><div>GST payable<b>"+money(x.paymentGst-x.expenseGst)+"</b></div><div>PST payable<b>"+money(x.paymentPst-x.expensePst)+"</b></div><div>Jobs completed<b>"+x.jobsCompleted+"</b></div></div></div><div class='tax-card'><h4>PAYMENT DETAILS</h4><table class='book-table'><thead><tr><th>Date</th><th>Job</th><th>Method</th><th>Base</th><th>GST</th><th>PST</th></tr></thead><tbody>"+(x.payments.map(p=>"<tr><td>"+esc(p.payment_date)+"</td><td>#"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+"</td><td>"+esc(p.payment_method)+"</td><td>"+money(p.amount)+"</td><td>"+money(p.gst_amount)+"</td><td>"+money(p.pst_amount)+"</td></tr>").join("")||"<tr><td colspan='6'>No payments in this period.</td></tr>")+"</tbody></table></div><div class='tax-card'><h4>EXPENSE DETAILS</h4><table class='book-table'><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Base</th><th>GST</th><th>PST</th></tr></thead><tbody>"+(x.expenses.map(e=>"<tr><td>"+esc(e.expense_date)+"</td><td>"+esc(e.category)+"</td><td>"+esc(e.description)+"</td><td>"+money(e.amount)+"</td><td>"+money(e.gst_amount)+"</td><td>"+money(e.pst_amount)+"</td></tr>").join("")||"<tr><td colspan='6'>No expenses in this period.</td></tr>")+"</tbody></table></div>";
+}
+async function saveBookkeepingReport(){
+  if(!lastBookkeeping){await refreshBookkeeping();if(!lastBookkeeping)return}const from=document.getElementById("rfrom").value,to=document.getElementById("rto").value;
+  const d={report_date:to,jobs_completed:lastBookkeeping.jobsCompleted,revenue:lastBookkeeping.revenue,parts_expense:lastBookkeeping.expenseBase,labour_expense:0,other_expense:0,outstanding_amount:0,manager_notes:"Automatic bookkeeping report: "+from+" to "+to,payment_gst:lastBookkeeping.paymentGst,payment_pst:lastBookkeeping.paymentPst,expense_gst:lastBookkeeping.expenseGst,expense_pst:lastBookkeeping.expensePst,net_gst:lastBookkeeping.paymentGst-lastBookkeeping.expenseGst,net_pst:lastBookkeeping.paymentPst-lastBookkeeping.expensePst};
+  const r=await db.from("weekend_reports").upsert(d,{onConflict:"report_date"});const m=document.getElementById("rm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Bookkeeping report saved ✓";setTimeout(viewReports,500)
+}
+function downloadBookkeepingCSV(){
+  if(!lastBookkeeping)return;const rows=[["TYPE","DATE","JOB/CATEGORY","DESCRIPTION","METHOD","BASE","GST 5%","PST 7%"],...lastBookkeeping.payments.map(x=>["PAYMENT",x.payment_date,"Job #"+(x.repair_jobs&&x.repair_jobs.job_number||""),x.repair_jobs&&x.repair_jobs.customers&&x.repair_jobs.customers.name||"",x.payment_method,x.amount,x.gst_amount,x.pst_amount]),...lastBookkeeping.expenses.map(x=>["EXPENSE",x.expense_date,x.category,x.description,"",x.amount,x.gst_amount,x.pst_amount])];const csv=rows.map(r=>r.map(v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"').join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="oakbank-bookkeeping-"+document.getElementById("rfrom").value+"-to-"+document.getElementById("rto").value+".csv";a.click();URL.revokeObjectURL(a.href)
 }
 async function viewReports(){
   const r=await db.from("weekend_reports").select("*").order("report_date",{ascending:false});
-  panel.innerHTML="<h3>📊 Weekend Reports</h3>"+((r.data||[]).map(x=>"<div class='item'><strong>"+esc(x.report_date)+" — Revenue "+money(x.revenue)+"</strong><div class='meta'>Jobs: "+x.jobs_completed+" • Parts: "+money(x.parts_expense)+" • Labour: "+money(x.labour_expense)+" • Other: "+money(x.other_expense)+" • Outstanding: "+money(x.outstanding_amount)+"</div><div class='meta' style='margin-top:8px'><b>Tax on payments:</b> GST "+money(x.payment_gst)+" • PST "+money(x.payment_pst)+"</div><div class='meta'><b>Tax on expenses:</b> GST "+money(x.expense_gst)+" • PST "+money(x.expense_pst)+"</div><div class='meta'><b>Net tax:</b> GST "+money(x.net_gst)+" • PST "+money(x.net_pst)+"</div><div>"+esc(x.manager_notes||"")+"</div></div>").join("")||"<p class='muted'>No reports yet.</p>");
-  panel.classList.remove("hidden");scroll()
+  panel.innerHTML="<h3>📊 Saved Bookkeeping Reports</h3>"+((r.data||[]).map(x=>"<div class='item'><strong>Report ending "+esc(x.report_date)+" — Revenue "+money(x.revenue)+"</strong><div class='meta'>Jobs completed: "+x.jobs_completed+" • Outstanding: "+money(x.outstanding_amount)+"</div><div class='meta'>Payments GST: "+money(x.payment_gst)+" • Payments PST: "+money(x.payment_pst)+"</div><div class='meta'>Expenses GST: "+money(x.expense_gst)+" • Expenses PST: "+money(x.expense_pst)+"</div><div class='meta'><b>Net GST: "+money(x.net_gst)+" • Net PST: "+money(x.net_pst)+"</b></div><div class='section-actions'><button data-openr='"+esc(x.report_date)+"'>Open Date</button></div></div>").join("")||"<p class='muted'>No reports yet.</p>");
+  panel.classList.remove("hidden");scroll();document.querySelectorAll("[data-openr]").forEach(function(b){b.onclick=function(){reportForm();setTimeout(function(){document.getElementById("rto").value=b.dataset.openr;const d=new Date(b.dataset.openr+"T12:00:00");d.setDate(d.getDate()-1);document.getElementById("rfrom").value=d.toISOString().slice(0,10);refreshBookkeeping()},50)}})
 }
 
 /* INVOICE */
