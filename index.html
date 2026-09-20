@@ -1,419 +1,148 @@
  <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111827">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Oakbank Service Centre</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:#111827;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-h1{font-size:20px;margin:2px 0}.eyebrow{font-size:11px;letter-spacing:.14em;opacity:.7;font-weight:700}
-main{max-width:1000px;margin:auto;padding:18px}.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px #0001}
-h2,h3{margin-top:0}.muted{color:#6b7280}.message{min-height:20px;color:#b91c1c}
-label{display:block;font-weight:600;margin:12px 0}
-input,select,textarea{width:100%;padding:12px;margin-top:6px;border:1px solid #d1d5db;border-radius:10px;font-size:16px;font-family:inherit}
-textarea{min-height:90px}
-button{border:0;border-radius:10px;padding:12px 15px;font-size:15px;font-weight:700;background:#111827;color:#fff;cursor:pointer}
-button:disabled{opacity:.6}.secondary{background:#4b5563}.hidden{display:none!important}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
-.tile{text-align:left;background:#fff;color:#111827;border:1px solid #e5e7eb;padding:16px;min-height:105px}
-.tile span{font-size:25px;display:block;margin-bottom:8px}.tile b{display:block}.tile small{display:block;color:#6b7280;margin-top:4px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.section-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-.item{border:1px solid #e5e7eb;border-radius:12px;padding:13px;margin-top:10px}.item strong{display:block;margin-bottom:5px}
-.meta{color:#6b7280;font-size:14px}.search{margin-bottom:10px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{border:1px solid #e5e7eb;border-radius:12px;padding:13px}.stat b{font-size:22px;display:block;margin-top:4px}
-.invoice{background:#fff;max-width:800px;margin:auto}.invoice-head{display:flex;justify-content:space-between;gap:15px;border-bottom:2px solid #111827;padding-bottom:14px}
-.invoice-title{font-size:28px;font-weight:800}.invoice-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
-.invoice-table{width:100%;border-collapse:collapse;margin-top:12px}.invoice-table th,.invoice-table td{padding:9px 5px;border-bottom:1px solid #e5e7eb;text-align:left}
-.invoice-table th:last-child,.invoice-table td:last-child{text-align:right}.invoice-total{max-width:330px;margin:15px 0 0 auto}
-.invoice-total div{display:flex;justify-content:space-between;padding:6px 0}.invoice-total .grand{border-top:2px solid #111827;font-size:19px;font-weight:800;padding-top:9px}
-.invoice-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
-@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:650px){.form-grid,.invoice-grid,.stats{grid-template-columns:1fr}.section-actions{flex-direction:column}.section-actions button{width:100%}.invoice-head{flex-direction:column}.tile{min-height:100px}}
-@media print{body{background:#fff}header,#login,#dash>.top,#dash>.grid,#dash>.connection{display:none!important}main{padding:0;max-width:none}.panel{display:block!important;box-shadow:none;margin:0;padding:0}.invoice-actions{display:none!important}.invoice{max-width:none}}
+*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{background:#111827;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}h1{font-size:19px;margin:2px 0}.eyebrow{font-size:11px;letter-spacing:.14em;opacity:.7;font-weight:800}main{max-width:1180px;margin:auto;padding:16px}.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 12px #00000012}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tile{text-align:left;background:#fff;color:#111827;border:1px solid #e5e7eb;padding:16px;border-radius:12px;cursor:pointer}.tile span{font-size:23px;display:block;margin-bottom:6px}.tile b{display:block}.tile small{display:block;color:#6b7280;margin-top:4px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}label{display:block;font-weight:650;margin:8px 0}input,select,textarea{width:100%;padding:11px;margin-top:5px;border:1px solid #d1d5db;border-radius:9px;font-size:15px}textarea{min-height:80px}button{border:0;border-radius:9px;padding:10px 13px;font-weight:750;background:#111827;color:#fff;cursor:pointer}button.secondary{background:#4b5563}button.light{background:#e5e7eb;color:#111827}button.danger{background:#b91c1c}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}.hidden{display:none!important}.muted{color:#6b7280}.msg{min-height:20px}.ok{color:#047857}.err{color:#b91c1c}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;margin-top:10px;min-width:720px}th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:13px;vertical-align:top}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.kpi{padding:12px;border:1px solid #e5e7eb;border-radius:10px}.kpi b{font-size:18px;display:block;margin-top:4px}.subcard{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}.right{text-align:right}.badge{display:inline-block;background:#eef2ff;padding:3px 7px;border-radius:999px}.two{display:grid;grid-template-columns:2fr 1fr;gap:12px}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}@media(max-width:650px){.grid,.formgrid,.kpis{grid-template-columns:1fr}main{padding:10px}header{padding:12px}table{min-width:650px}.tile{padding:14px}}
+@media print{header,.grid,#logout,.no-print,.actions button{display:none!important}body{background:#fff}.card{box-shadow:none;border:0}main{max-width:none}}
 </style>
 </head>
 <body>
-<header>
-  <div><div class="eyebrow">MANAGEMENT</div><h1>Oakbank Service Centre</h1></div>
-  <button id="logout" class="secondary hidden">Log out</button>
-</header>
-
+<header><div><div class="eyebrow">MANAGEMENT</div><h1>Oakbank Service Centre</h1></div><button id="logout" class="secondary hidden">Log out</button></header>
 <main>
-<section id="login" class="card">
-  <h2>Manager Login</h2>
-  <p class="muted">Sign in with your Supabase manager account.</p>
-  <form id="loginForm">
-    <label>Email<input id="email" type="email" required autocomplete="email"></label>
-    <label>Password<input id="password" type="password" required autocomplete="current-password"></label>
-    <button>Sign in</button>
-    <p id="loginMsg" class="message"></p>
-  </form>
-</section>
-
-<section id="dash" class="hidden">
-  <div class="card top">
-    <div class="eyebrow">DASHBOARD</div>
-    <h2>Oakbank Service Centre</h2>
-    <p class="muted">Jobs, customers, vehicles, payments and shop management.</p>
-    <div id="stats" class="stats"></div>
-  </div>
-
-  <div id="panel" class="card panel hidden"></div>
-
-  <div class="grid">
-    <button class="tile" data-s="jobs"><span>🔧</span><b>Jobs</b><small>Repair jobs & invoices</small></button>
-    <button class="tile" data-s="customers"><span>👥</span><b>Customers</b><small>Search, add and edit</small></button>
-    <button class="tile" data-s="vehicles"><span>🚗</span><b>Vehicles</b><small>Customer vehicles</small></button>
-    <button class="tile" data-s="payments"><span>💰</span><b>Payments</b><small>Payments & balances</small></button>
-    <button class="tile" data-s="parts"><span>📦</span><b>Parts</b><small>Parts on jobs</small></button>
-    <button class="tile" data-s="expenses"><span>🧾</span><b>Shop Expenses</b><small>Operating expenses</small></button>
-    <button class="tile" data-s="reports"><span>📊</span><b>Weekend Reports</b><small>Manager reports</small></button>
-  </div>
-
-  <div class="card connection"><b>Connection</b><p id="connection" class="muted">Checking Supabase…</p></div>
+<section id="login" class="card"><h2>Manager Login</h2><p class="muted">Sign in with your Supabase account.</p><form id="loginForm"><label>Email<input id="email" type="email" required></label><label>Password<input id="password" type="password" required></label><button>Sign in</button><p id="loginMsg" class="msg"></p></form></section>
+<section id="app" class="hidden">
+<div class="card"><div class="eyebrow">DASHBOARD</div><h2>Oakbank Service Centre</h2><div class="kpis"><div class="kpi">Jobs<b id="kJobs">0</b></div><div class="kpi">Customers<b id="kCustomers">0</b></div><div class="kpi">Payments<b id="kPayments">$0.00</b></div><div class="kpi">Expenses<b id="kExpenses">$0.00</b></div><div class="kpi">Invoices Owing<b id="kOwing">$0.00</b></div></div></div>
+<div id="panel" class="card hidden"></div>
+<div class="grid">
+<button class="tile" data-view="jobs"><span>🔧</span><b>Jobs</b><small>Create/edit jobs, customers and vehicles</small></button>
+<button class="tile" data-view="customers"><span>👥</span><b>Customers</b><small>Search and avoid duplicate records</small></button>
+<button class="tile" data-view="vehicles"><span>🚗</span><b>Vehicles</b><small>Customer-linked vehicles</small></button>
+<button class="tile" data-view="estimates"><span>📝</span><b>Estimates</b><small>Items, tax and convert to invoice</small></button>
+<button class="tile" data-view="invoices"><span>🧾</span><b>Invoices</b><small>Direct invoices, payments, print/share</small></button>
+<button class="tile" data-view="payments"><span>💰</span><b>Payments</b><small>Job/invoice payments and taxes</small></button>
+<button class="tile" data-view="parts"><span>📦</span><b>Job Parts</b><small>Cost, sell price, margin and tax</small></button>
+<button class="tile" data-view="catalog"><span>🗂️</span><b>Parts Catalog</b><small>Reusable parts and pricing</small></button>
+<button class="tile" data-view="expenses"><span>💵</span><b>Shop Expenses</b><small>Edit expenses and tax</small></button>
+<button class="tile" data-view="technicians"><span>👨‍🔧</span><b>Technicians</b><small>Cost and bill rates</small></button>
+<button class="tile" data-view="hours"><span>⏱️</span><b>Technician Hours</b><small>Job hours, labour cost and profit</small></button>
+<button class="tile" data-view="supplies"><span>🧰</span><b>Shop Supplies</b><small>Cost/sell and tax</small></button>
+<button class="tile" data-view="reports"><span>📊</span><b>Weekend Reports</b><small>Automatic weekly summary</small></button>
+<button class="tile" data-view="bookkeeping"><span>📚</span><b>Bookkeeping</b><small>Date-range accounting and CSV</small></button>
+<button class="tile" data-view="photos"><span>📷</span><b>Job Photos</b><small>Before/during/after photo records</small></button>
+<button class="tile" data-view="fixed"><span>🏢</span><b>Fixed Expenses</b><small>Recurring expenses</small></button>
+<button class="tile" data-view="suppliers"><span>📄</span><b>Supplier Invoices</b><small>Invoice records and line items</small></button>
+</div>
 </section>
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL="https://gwzfrsixcdsyczbpmfqq.supabase.co";
-const SUPABASE_KEY="sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const login=document.getElementById("login"),dash=document.getElementById("dash"),panel=document.getElementById("panel"),logout=document.getElementById("logout");
-
-function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
-const GST_RATE=0.05,PST_RATE=0.07;
-function money(v){return "$"+Number(v||0).toFixed(2)}
-function taxAmounts(base,gst,pst){return{gst:gst?Number(base||0)*GST_RATE:0,pst:pst?Number(base||0)*PST_RATE:0}}
-function taxBox(g,p){return "<div class='form-grid'><label>GST 5%<select id='taxgst'><option value='false' "+(!g?"selected":"")+">No</option><option value='true' "+(g?"selected":"")+">Yes</option></select></label><label>PST 7%<select id='taxpst'><option value='false' "+(!p?"selected":"")+">No</option><option value='true' "+(p?"selected":"")+">Yes</option></select></label></div>"}
-function scroll(){setTimeout(function(){panel.scrollIntoView({behavior:"smooth",block:"start"})},40)}
-function dashboard(){login.classList.add("hidden");dash.classList.remove("hidden");logout.classList.remove("hidden");document.getElementById("connection").textContent="Connected to Supabase ✓";loadStats()}
-function loginScreen(){dash.classList.add("hidden");login.classList.remove("hidden");logout.classList.add("hidden")}
-
-async function loadStats(){
-  const [jobs,payments]=await Promise.all([
-    db.from("repair_jobs").select("id,status"),
-    db.from("payments").select("amount")
-  ]);
-  if(jobs.error||payments.error)return;
-  const open=jobs.data.filter(x=>["Open","approved","estimate"].includes(x.status)).length;
-  const progress=jobs.data.filter(x=>["In Progress","in_progress","Waiting for Parts","waiting_parts","Ready","ready"].includes(x.status)).length;
-  const completed=jobs.data.filter(x=>["Completed","completed","Picked Up","picked_up"].includes(x.status)).length;
-  const revenue=payments.data.reduce((s,x)=>s+Number(x.amount||0),0);
-  document.getElementById("stats").innerHTML=
-    '<div class="stat"><span>Open</span><b>'+open+'</b></div>'+
-    '<div class="stat"><span>In progress</span><b>'+progress+'</b></div>'+
-    '<div class="stat"><span>Completed</span><b>'+completed+'</b></div>'+
-    '<div class="stat"><span>Payments</span><b>'+money(revenue)+'</b></div>';
-}
-
-document.getElementById("loginForm").addEventListener("submit",async function(e){
+const URL="https://gwzfrsixcdsyczbpmfqq.supabase.co",KEY="sb_publishable_rC6FAks-NitzyqHgdh8z_w_8KfdZVqb";
+const db=supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const GST=.05,PST=.07,$=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10);
+function pack(v){return encodeURIComponent(JSON.stringify(v))} function unpack(v){return JSON.parse(decodeURIComponent(v))} function n(v){return Number(v||0)} function money(v){return "$"+n(v).toFixed(2)} function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))} function tx(base,g,p){return{gst:g?n(base)*GST:0,pst:p?n(base)*PST:0}} function panel(title,body){$("panel").innerHTML=`<div class="actions"><button class="light" onclick="hidePanel()">← Dashboard</button></div><h2>${title}</h2>${body}`;$("panel").classList.remove("hidden");$("panel").scrollIntoView({behavior:"smooth",block:"start"})} function hidePanel(){$("panel").classList.add("hidden")}
+function fail(r){if(r?.error){alert(r.error.message);return true}return false} function sum(a,k){return (a||[]).reduce((s,x)=>s+n(x[k]),0)}
+function csvDownload(name,rows){if(!rows.length)return alert("No rows to export");let cols=Object.keys(rows[0]),q=v=>'"'+String(v??"").replace(/"/g,'""')+'"',csv=[cols.map(q).join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\n"),blob=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function filterTable(id,q){let t=$(id);if(!t)return;[...t.querySelectorAll("tr")].slice(1).forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?"":"none")}
+let authBooted=false;
+let authBusy=false;
+function showApp(){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("logout").classList.remove("hidden");refreshKpis()}
+function showLogin(){$("app").classList.add("hidden");$("login").classList.remove("hidden");$("logout").classList.add("hidden")}
+$("loginForm").onsubmit=async e=>{
   e.preventDefault();
-  const m=document.getElementById("loginMsg");
-  m.style.color="#6b7280";m.textContent="Signing in…";
-  const r=await db.auth.signInWithPassword({
-    email:document.getElementById("email").value.trim(),
-    password:document.getElementById("password").value
-  });
-  if(r.error){m.style.color="#b91c1c";m.textContent=r.error.message;return}
-  m.textContent="";dashboard();
+  if(authBusy)return;
+  authBusy=true;
+  $("loginMsg").textContent="Signing in…";
+  const email=$("email").value.trim();
+  const password=$("password").value;
+  const r=await db.auth.signInWithPassword({email,password});
+  authBusy=false;
+  if(r.error){$("loginMsg").textContent=r.error.message;return;}
+  if(r.data?.session)showApp();
+};
+$("logout").onclick=async()=>{await db.auth.signOut();showLogin()};
+
+// Authentication is initialized exactly once. A transient null session during startup
+// must never send a successfully signed-in user back to the login screen.
+db.auth.onAuthStateChange((event,session)=>{
+  if(session){setTimeout(()=>showApp(),0);return;}
+  if(event==="SIGNED_OUT"){setTimeout(()=>showLogin(),0);return;}
+  if(event==="INITIAL_SESSION" && authBooted)setTimeout(()=>showLogin(),0);
 });
-logout.addEventListener("click",async function(){await db.auth.signOut();loginScreen();document.getElementById("password").value=""});
-db.auth.onAuthStateChange(function(e,s){if(s)dashboard();else loginScreen()});
+(async()=>{
+  const r=await db.auth.getSession();
+  authBooted=true;
+  if(r.error){$("loginMsg").textContent=r.error.message;showLogin();return;}
+  if(r.data?.session)showApp();else showLogin();
+})();
+async function count(t){let r=await db.from(t).select("*",{count:"exact",head:true});return r.count||0} async function refreshKpis(){try{$("kJobs").textContent=await count("repair_jobs");$("kCustomers").textContent=await count("customers");let p=await db.from("payments").select("amount"),e=await db.from("shop_expenses").select("amount"),i=await db.from("invoices").select("id,total,status"),ip=await db.from("payments").select("invoice_id,amount").not("invoice_id","is",null);$("kPayments").textContent=money(sum(p.data,"amount"));$("kExpenses").textContent=money(sum(e.data,"amount"));let paid={};(ip.data||[]).forEach(x=>paid[x.invoice_id]=(paid[x.invoice_id]||0)+n(x.amount));let owing=(i.data||[]).reduce((s,x)=>s+Math.max(0,n(x.total)-n(paid[x.id])),0);$("kOwing").textContent=money(owing)}catch(e){}}
+async function customerOptions(sel){let r=await db.from("customers").select("id,name,phone").order("name");return (r.data||[]).map(x=>`<option value="${x.id}" ${x.id===sel?"selected":""}>${esc(x.name)}${x.phone?" — "+esc(x.phone):""}</option>`).join("")}
+async function vehicleOptions(customer,sel){if(!customer)return '<option value="">Select customer first</option>';let r=await db.from("vehicles").select("id,year,make,model,plate").eq("customer_id",customer).order("created_at");return '<option value="">No vehicle / select vehicle</option>'+(r.data||[]).map(v=>`<option value="${v.id}" ${v.id===sel?"selected":""}>${esc([v.year,v.make,v.model].filter(Boolean).join(" "))}${v.plate?" — "+esc(v.plate):""}</option>`).join("")}
+async function jobOptions(sel){let r=await db.from("repair_jobs").select("id,job_number,customers(name)").order("created_at",{ascending:false});return '<option value="">None</option>'+(r.data||[]).map(x=>`<option value="${x.id}" ${x.id===sel?"selected":""}>#${x.job_number} — ${esc(x.customers?.name||"")}</option>`).join("")}
+async function invoiceOptions(sel){let r=await db.from("invoices").select("id,invoice_number,customers(name)").order("created_at",{ascending:false});return '<option value="">None</option>'+(r.data||[]).map(x=>`<option value="${x.id}" ${x.id===sel?"selected":""}>#${x.invoice_number} — ${esc(x.customers?.name||"")}</option>`).join("")}
 
-function panelHeader(title,text,buttons){
-  panel.innerHTML="<h3>"+title+"</h3><p class='muted'>"+text+"</p><div class='section-actions'>"+buttons+"</div>";
-  panel.classList.remove("hidden");scroll();
-}
+async function customers(){let r=await db.from("customers").select("*").order("created_at",{ascending:false});panel("👥 Customers",`<div class="actions"><button onclick="newCustomer()">New Customer</button><input id="cs" placeholder="Search..." oninput="filterTable('ct',this.value)"></div><div class="scroll" id="ct"><table><tr><th>Name</th><th>Phone</th><th>Email</th><th>Address</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.email)}</td><td>${esc(x.address)}</td><td><button onclick="newCustomer(unpack('${pack(x)}'))">Edit</button></td></tr>`).join("")}</table></div>`)}
+function newCustomer(x={}){panel("👥 "+(x.id?"Edit":"New")+" Customer",`<form id="cf"><div class="formgrid"><label>Name<input id="cn" required value="${esc(x.name)}"></label><label>Phone<input id="cp" value="${esc(x.phone)}"></label><label>Email<input id="ce" value="${esc(x.email)}"></label><label>Address<input id="ca" value="${esc(x.address)}"></label></div><label>Notes<textarea id="co">${esc(x.notes)}</textarea></label><button>Save</button><p id="cm" class="msg"></p></form>`);$("cf").onsubmit=async e=>{e.preventDefault();let o={name:$("cn").value.trim(),phone:$("cp").value.trim()||null,email:$("ce").value.trim()||null,address:$("ca").value.trim()||null,notes:$("co").value.trim()||null};if(!x.id){let q=db.from("customers").select("id,name,phone,email");if(o.phone)q=q.eq("phone",o.phone);else if(o.email)q=q.eq("email",o.email);else q=q.ilike("name",o.name);let d=await q.limit(3);if((d.data||[]).length&&!confirm(`Possible existing customer: ${(d.data||[]).map(z=>z.name+" "+(z.phone||"")).join(", ")}. Create another anyway?`))return}let r=x.id?await db.from("customers").update(o).eq("id",x.id):await db.from("customers").insert(o);if(fail(r))return;$("cm").innerHTML='<span class="ok">Saved ✓</span>';setTimeout(customers,350)}}
+async function vehicles(){let r=await db.from("vehicles").select("*,customers(name)").order("created_at",{ascending:false});panel("🚗 Vehicles",`<div class="actions"><button onclick="newVehicle()">Add Vehicle</button><input placeholder="Search..." oninput="filterTable('vt',this.value)"></div><div class="scroll" id="vt"><table><tr><th>Vehicle</th><th>Customer</th><th>VIN</th><th>Plate</th><th>Mileage</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc([x.year,x.make,x.model,x.trim].filter(Boolean).join(" "))}</td><td>${esc(x.customers?.name)}</td><td>${esc(x.vin)}</td><td>${esc(x.plate)}</td><td>${esc(x.mileage)}</td><td><button onclick="newVehicle(unpack('${pack(x)}'))">Edit</button></td></tr>`).join("")}</table></div>`)}
+async function newVehicle(x={}){panel("🚗 "+(x.id?"Edit":"Add")+" Vehicle",`<form id="vf"><label>Customer<select id="vc" required>${await customerOptions(x.customer_id)}</select></label><div class="formgrid"><label>Year<input id="vy" type="number" value="${x.year||""}"></label><label>Make<input id="vm" value="${esc(x.make)}"></label><label>Model<input id="vmo" value="${esc(x.model)}"></label><label>Trim<input id="vtr" value="${esc(x.trim)}"></label><label>VIN<input id="vv" value="${esc(x.vin)}"></label><label>Plate<input id="vp" value="${esc(x.plate)}"></label><label>Mileage<input id="vmi" type="number" value="${x.mileage||""}"></label></div><label>Notes<textarea id="vn">${esc(x.notes)}</textarea></label><button>Save</button></form>`);$("vf").onsubmit=async e=>{e.preventDefault();let o={customer_id:$("vc").value,year:n($("vy").value)||null,make:$("vm").value||null,model:$("vmo").value||null,trim:$("vtr").value||null,vin:$("vv").value||null,plate:$("vp").value||null,mileage:n($("vmi").value)||null,notes:$("vn").value||null},r=x.id?await db.from("vehicles").update(o).eq("id",x.id):await db.from("vehicles").insert(o);if(!fail(r))vehicles()}}
 
-/* CUSTOMERS */
-async function customers(){
-  panelHeader("👥 Customers","Search, add and edit customer records.","<button id='newC'>New Customer</button><button id='viewC'>View Customers</button>");
-  document.getElementById("newC").onclick=function(){customerForm()};
-  document.getElementById("viewC").onclick=viewCustomers;
-}
-function customerForm(c){
-  c=c||{};
-  panel.innerHTML="<h3>"+(c.id?"Edit Customer":"New Customer")+"</h3><form id='cf'>"+
-  "<label>Name<input id='cn' required value='"+esc(c.name)+"'></label>"+
-  "<div class='form-grid'><label>Phone<input id='cp' value='"+esc(c.phone)+"'></label><label>Email<input id='ce' type='email' value='"+esc(c.email)+"'></label></div>"+
-  "<label>Address<input id='ca' value='"+esc(c.address)+"'></label><label>Notes<textarea id='cno'>"+esc(c.notes)+"</textarea></label>"+
-  "<div class='section-actions'><button>Save Customer</button><button type='button' id='cc' class='secondary'>Cancel</button></div><p id='cm' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("cc").onclick=customers;
-  document.getElementById("cf").onsubmit=async function(e){
-    e.preventDefault();const m=document.getElementById("cm");m.style.color="#6b7280";m.textContent="Saving…";
-    const data={name:document.getElementById("cn").value.trim(),phone:document.getElementById("cp").value.trim()||null,email:document.getElementById("ce").value.trim()||null,address:document.getElementById("ca").value.trim()||null,notes:document.getElementById("cno").value.trim()||null};
-    const r=c.id?await db.from("customers").update(data).eq("id",c.id):await db.from("customers").insert(data);
-    if(r.error){m.style.color="#b91c1c";m.textContent=r.error.message;return}
-    m.style.color="#166534";m.textContent="Saved ✓";setTimeout(viewCustomers,400);
-  };
-}
-async function viewCustomers(){
-  panel.innerHTML="<h3>👥 Customers</h3><p class='muted'>Search and manage customers.</p><input id='cs' class='search' placeholder='Search name, phone or email'><div id='cl'>Loading…</div>";
-  panel.classList.remove("hidden");scroll();
-  document.getElementById("cs").oninput=function(){loadCustomers(this.value)};loadCustomers("");
-}
-async function loadCustomers(s){
-  let r=db.from("customers").select("*").order("created_at",{ascending:false});
-  if(s.trim())r=r.or("name.ilike.%"+s.trim()+"%,phone.ilike.%"+s.trim()+"%,email.ilike.%"+s.trim()+"%");
-  const x=await r;if(x.error){document.getElementById("cl").innerHTML="<p class='message'>"+esc(x.error.message)+"</p>";return}
-  document.getElementById("cl").innerHTML=x.data.length?x.data.map(function(c){
-    return "<div class='item'><strong>"+esc(c.name)+"</strong><div class='meta'>"+esc(c.phone||"No phone")+(c.email?" • "+esc(c.email):"")+"</div>"+(c.address?"<div class='meta'>"+esc(c.address)+"</div>":"")+"<div class='section-actions'><button data-edit='"+c.id+"'>Edit</button></div></div>"
-  }).join(""):"<p class='muted'>No customers found.</p>";
-  document.querySelectorAll("[data-edit]").forEach(function(b){b.onclick=function(){const c=x.data.find(y=>y.id===b.dataset.edit);customerForm(c)}})
-}
+async function jobs(){let r=await db.from("repair_jobs").select("*,customers(name),vehicles(year,make,model,plate)").order("created_at",{ascending:false});panel("🔧 Jobs",`<div class="actions"><button onclick="newJob()">New Job</button><input placeholder="Search..." oninput="filterTable('jt',this.value)"></div><div class="scroll" id="jt"><table><tr><th>Job</th><th>Customer</th><th>Vehicle</th><th>Status</th><th>Received</th><th>Final</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>#${x.job_number}</td><td>${esc(x.customers?.name)}</td><td>${esc([x.vehicles?.year,x.vehicles?.make,x.vehicles?.model].filter(Boolean).join(" "))}</td><td><span class="badge">${esc(x.status)}</span></td><td>${esc(x.date_received)}</td><td>${money(x.final_amount)}</td><td><button onclick="newJob(unpack('${pack(x)}'))">Edit</button></td></tr>`).join("")}</table></div>`)}
+async function newJob(x={}){panel("🔧 "+(x.id?"Edit":"New")+" Job",`<form id="jf"><label>Existing Customer<select id="jc" required>${await customerOptions(x.customer_id)}</select></label><div class="actions"><button type="button" class="light" onclick="newCustomer()">+ New customer</button><button type="button" class="light" onclick="newVehicle()">+ New vehicle</button></div><label>Vehicle<select id="jv"></select></label><label>Description<textarea id="jd" required>${esc(x.description)}</textarea></label><div class="formgrid"><label>Status<select id="js">${['Open','In Progress','Waiting for Parts','Ready','Completed','Cancelled'].map(s=>`<option ${s===(x.status||'Open')?'selected':''}>${s}</option>`).join('')}</select></label><label>Date Received<input id="jdr" type="date" value="${x.date_received||today()}"></label><label>Expected Completion<input id="jec" type="date" value="${x.expected_completion||""}"></label><label>Estimate Amount<input id="jea" type="number" step=".01" value="${n(x.estimate_amount)}"></label><label>Parts Cost<input id="jpc" type="number" step=".01" value="${n(x.parts_cost)}"></label><label>Labour Billed<input id="jlab" type="number" step=".01" value="${n(x.labour_amount)}"></label><label>Final Amount<input id="jfin" type="number" step=".01" value="${n(x.final_amount)}"></label><label>Technician text<input id="jtech" value="${esc(x.technician)}"></label></div><label><input id="jg" type="checkbox" ${x.gst_enabled?'checked':''}> GST 5%</label><label><input id="jpst" type="checkbox" ${x.pst_enabled?'checked':''}> PST 7%</label><label>Notes<textarea id="jn">${esc(x.notes)}</textarea></label><button>Save Job</button></form>`);async function lv(){$("jv").innerHTML=await vehicleOptions($("jc").value,x.vehicle_id)}$("jc").onchange=lv;await lv();$("jf").onsubmit=async e=>{e.preventDefault();let base=n($("jfin").value)||n($("jea").value),t=tx(base,$("jg").checked,$("jpst").checked),o={customer_id:$("jc").value,vehicle_id:$("jv").value||null,description:$("jd").value,status:$("js").value,date_received:$("jdr").value,expected_completion:$("jec").value||null,estimate_amount:n($("jea").value),parts_cost:n($("jpc").value),labour_amount:n($("jlab").value),final_amount:n($("jfin").value),technician:$("jtech").value||null,notes:$("jn").value||null,gst_enabled:$("jg").checked,pst_enabled:$("jpst").checked,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("repair_jobs").update(o).eq("id",x.id):await db.from("repair_jobs").insert(o);if(!fail(r)){refreshKpis();jobs()}}}
 
-/* VEHICLES */
-async function customerOptions(){
-  const r=await db.from("customers").select("id,name,phone").order("name");
-  return r.data||[];
-}
-async function vehicles(){
-  panelHeader("🚗 Vehicles","Customer-linked vehicle records.","<button id='newV'>Add Vehicle</button><button id='viewV'>View Vehicles</button>");
-  document.getElementById("newV").onclick=function(){vehicleForm()};
-  document.getElementById("viewV").onclick=viewVehicles;
-}
-async function vehicleForm(v){
-  const cs=await customerOptions();
-  panel.innerHTML="<h3>"+(v?"Edit Vehicle":"Add Vehicle")+"</h3><form id='vf'>"+
-  "<label>Customer<select id='vc' required><option value=''>Select customer</option>"+cs.map(c=>"<option value='"+c.id+"' "+(v&&v.customer_id===c.id?"selected":"")+">"+esc(c.name)+" "+esc(c.phone||"")+"</option>").join("")+"</select></label>"+
-  "<div class='form-grid'><label>Year<input id='vy' type='number' value='"+esc(v&&v.year)+"'></label><label>Make<input id='vma' value='"+esc(v&&v.make)+"'></label></div>"+
-  "<div class='form-grid'><label>Model<input id='vmo' value='"+esc(v&&v.model)+"'></label><label>Trim<input id='vt' value='"+esc(v&&v.trim)+"'></label></div>"+
-  "<div class='form-grid'><label>VIN<input id='vvin' value='"+esc(v&&v.vin)+"'></label><label>Plate<input id='vpl' value='"+esc(v&&v.plate)+"'></label></div>"+
-  "<label>Mileage<input id='vmi' type='number' value='"+esc(v&&v.mileage)+"'></label><label>Notes<textarea id='vno'>"+esc(v&&v.notes)+"</textarea></label>"+
-  "<div class='section-actions'><button>Save Vehicle</button><button type='button' id='vcc' class='secondary'>Cancel</button></div><p id='vm' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("vcc").onclick=vehicles;
-  document.getElementById("vf").onsubmit=async function(e){
-    e.preventDefault();
-    const data={customer_id:document.getElementById("vc").value,year:Number(document.getElementById("vy").value)||null,make:document.getElementById("vma").value.trim()||null,model:document.getElementById("vmo").value.trim()||null,trim:document.getElementById("vt").value.trim()||null,vin:document.getElementById("vvin").value.trim()||null,plate:document.getElementById("vpl").value.trim()||null,mileage:Number(document.getElementById("vmi").value)||null,notes:document.getElementById("vno").value.trim()||null};
-    const r=v?await db.from("vehicles").update(data).eq("id",v.id):await db.from("vehicles").insert(data);
-    const m=document.getElementById("vm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Saved ✓";setTimeout(viewVehicles,400)
-  }
-}
-async function viewVehicles(){
-  panel.innerHTML="<h3>🚗 Vehicles</h3><p class='muted'>Search and manage vehicles.</p><input id='vs' class='search' placeholder='Search year, make, model, plate or VIN'><div id='vl'>Loading…</div>";
-  panel.classList.remove("hidden");scroll();document.getElementById("vs").oninput=function(){loadVehicles(this.value)};loadVehicles("")
-}
-async function loadVehicles(s){
-  const r=await db.from("vehicles").select("*,customers(name,phone)").order("created_at",{ascending:false});
-  if(r.error){document.getElementById("vl").textContent=r.error.message;return}
-  const a=r.data.filter(v=>!s||[v.year,v.make,v.model,v.plate,v.vin,v.customers&&v.customers.name].join(" ").toLowerCase().includes(s.toLowerCase()));
-  document.getElementById("vl").innerHTML=a.length?a.map(function(v){
-    return "<div class='item'><strong>"+esc([v.year,v.make,v.model,v.trim].filter(Boolean).join(" ")||"Vehicle")+"</strong><div class='meta'>Customer: "+esc(v.customers&&v.customers.name||"")+" • Plate: "+esc(v.plate||"")+"</div><div class='meta'>VIN: "+esc(v.vin||"")+" • Mileage: "+esc(v.mileage||"")+"</div><div class='section-actions'><button data-ve='"+v.id+"'>Edit</button></div></div>"
-  }).join(""):"<p class='muted'>No vehicles found.</p>";
-  document.querySelectorAll("[data-ve]").forEach(function(b){b.onclick=function(){const v=r.data.find(x=>x.id===b.dataset.ve);vehicleForm(v)}})
-}
+async function payments(){let r=await db.from("payments").select("*,repair_jobs(job_number,customers(name)),invoices(invoice_number)").order("payment_date",{ascending:false});panel("💰 Payments",`<button onclick="newPayment()">New Payment</button><div class="scroll"><table><tr><th>Date</th><th>Job</th><th>Invoice</th><th>Customer</th><th>Method</th><th>Amount</th><th>GST</th><th>PST</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${x.payment_date}</td><td>${x.repair_jobs?.job_number?'#'+x.repair_jobs.job_number:''}</td><td>${x.invoices?.invoice_number?'#'+x.invoices.invoice_number:''}</td><td>${esc(x.repair_jobs?.customers?.name)}</td><td>${esc(x.payment_method)}</td><td>${money(x.amount)}</td><td>${money(x.gst_amount)}</td><td>${money(x.pst_amount)}</td><td><button onclick="newPayment(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+async function newPayment(x={}){panel("💰 "+(x.id?"Edit":"New")+" Payment",`<form id="pf"><label>Job<select id="pj">${await jobOptions(x.job_id)}</select></label><label>Invoice<select id="pi">${await invoiceOptions(x.invoice_id)}</select></label><div class="formgrid"><label>Amount<input id="pa" type="number" step=".01" required value="${n(x.amount)}"></label><label>Method<select id="pm">${['cash','debit','credit','etransfer','other'].map(m=>`<option ${m===x.payment_method?'selected':''}>${m}</option>`).join('')}</select></label><label>Date<input id="pd" type="date" value="${x.payment_date||today()}"></label></div><label><input id="pg" type="checkbox" ${x.gst_enabled?'checked':''}> GST 5%</label><label><input id="pp" type="checkbox" ${x.pst_enabled?'checked':''}> PST 7%</label><label>Notes<textarea id="pn">${esc(x.notes)}</textarea></label><button>Save</button></form>`);$("pf").onsubmit=async e=>{e.preventDefault();let b=n($("pa").value),t=tx(b,$("pg").checked,$("pp").checked),o={job_id:$("pj").value||null,invoice_id:$("pi").value||null,amount:b,payment_method:$("pm").value,payment_date:$("pd").value,notes:$("pn").value||null,gst_enabled:$("pg").checked,pst_enabled:$("pp").checked,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("payments").update(o).eq("id",x.id):await db.from("payments").insert(o);if(!fail(r)){refreshKpis();payments()}}}
 
-/* JOBS */
-async function jobOptions(){
-  const r=await db.from("repair_jobs").select("id,job_number,description,customers(name)").order("created_at",{ascending:false});
-  return r.data||[];
-}
-async function jobForm(job){
-  const cs=await customerOptions();
-  panel.innerHTML="<h3>"+(job?"Edit Job":"New Repair Job")+"</h3><form id='jf'>"+
-  "<label>Customer<select id='jc' required><option value=''>Select customer</option>"+cs.map(c=>"<option value='"+c.id+"' "+(job&&job.customer_id===c.id?"selected":"")+">"+esc(c.name)+" "+esc(c.phone||"")+"</option>").join("")+"</select></label>"+
-  "<label>Vehicle<select id='jv'><option value=''>Select vehicle</option></select></label>"+
-  "<label>Repair Description<textarea id='jd' required>"+esc(job&&job.description)+"</textarea></label>"+
-  "<div class='form-grid'><label>Estimate ($)<input id='je' type='number' min='0' step='0.01' value='"+esc(job&&job.estimate_amount||0)+"'></label><label>Final Amount ($)<input id='jfina' type='number' min='0' step='0.01' value='"+esc(job&&job.final_amount||0)+"'></label></div>"+
-  "<div class='form-grid'><label>Parts Cost ($)<input id='jpc' type='number' min='0' step='0.01' value='"+esc(job&&job.parts_cost||0)+"'></label><label>Labour ($)<input id='jl' type='number' min='0' step='0.01' value='"+esc(job&&job.labour_amount||0)+"'></label></div>"+taxBox(job&&job.gst_enabled,job&&job.pst_enabled)+
-  "<div class='form-grid'><label>Status<select id='js'><option>Open</option><option>In Progress</option><option>Waiting for Parts</option><option>Ready</option><option>Completed</option><option>Picked Up</option><option>Cancelled</option></select></label><label>Expected Completion<input id='jec' type='date' value='"+esc(job&&job.expected_completion)+"'></label></div>"+
-  "<label>Technician<input id='jt' value='"+esc(job&&job.technician)+"'></label><label>Notes<textarea id='jn'>"+esc(job&&job.notes)+"</textarea></label>"+
-  "<div class='section-actions'><button>Save Job</button><button type='button' id='jcc' class='secondary'>Cancel</button></div><p id='jm' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("jcc").onclick=jobs;
-  if(job)document.getElementById("js").value=job.status||"Open";
-  async function loadJV(){
-    const id=document.getElementById("jc").value;
-    const r=await db.from("vehicles").select("id,year,make,model,plate").eq("customer_id",id).order("created_at");
-    const sel=document.getElementById("jv");
-    sel.innerHTML="<option value=''>Select vehicle</option>"+(r.data||[]).map(v=>"<option value='"+v.id+"'>"+esc([v.year,v.make,v.model].filter(Boolean).join(" "))+" "+esc(v.plate||"")+"</option>").join("");
-    if(job)sel.value=job.vehicle_id||""
-  }
-  document.getElementById("jc").onchange=loadJV;if(job)loadJV();
-  document.getElementById("jf").onsubmit=async function(e){
-    e.preventDefault();
-    const data={customer_id:document.getElementById("jc").value,vehicle_id:document.getElementById("jv").value||null,description:document.getElementById("jd").value.trim(),status:document.getElementById("js").value,estimate_amount:Number(document.getElementById("je").value)||0,final_amount:Number(document.getElementById("jfina").value)||0,parts_cost:Number(document.getElementById("jpc").value)||0,labour_amount:Number(document.getElementById("jl").value)||0,gst_enabled:document.getElementById("taxgst").value==="true",pst_enabled:document.getElementById("taxpst").value==="true",gst_amount:taxAmounts(Number(document.getElementById("jfina").value)||Number(document.getElementById("je").value)||0,document.getElementById("taxgst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("jfina").value)||Number(document.getElementById("je").value)||0,false,document.getElementById("taxpst").value==="true").pst,expected_completion:document.getElementById("jec").value||null,technician:document.getElementById("jt").value.trim()||null,notes:document.getElementById("jn").value.trim()||null};
-    const r=job?await db.from("repair_jobs").update(data).eq("id",job.id):await db.from("repair_jobs").insert(data).select("job_number").single();
-    const m=document.getElementById("jm");if(r.error){m.textContent=r.error.message;return}
-    m.style.color="#166534";m.textContent="Job saved "+(r.data&&r.data.job_number?"— Job #"+r.data.job_number:"")+" ✓";loadStats();setTimeout(viewJobs,500)
-  }
-}
-async function jobs(){
-  panelHeader("🔧 Jobs","Create, edit, update and invoice repair jobs.","<button id='nj'>New Job</button><button id='vj'>View Jobs</button>");
-  document.getElementById("nj").onclick=function(){jobForm()};document.getElementById("vj").onclick=viewJobs
-}
-async function viewJobs(){
-  const r=await db.from("repair_jobs").select("*,customers(name,phone),vehicles(year,make,model,plate)").order("created_at",{ascending:false});
-  panel.innerHTML="<h3>🔧 Jobs</h3><p class='muted'>Search jobs and open invoices.</p><input id='jsearch' class='search' placeholder='Search job number, customer, vehicle or status'><div id='jlst'>Loading…</div>";
-  panel.classList.remove("hidden");scroll();
-  function draw(s){
-    const a=(r.data||[]).filter(j=>!s||[j.job_number,j.status,j.description,j.customers&&j.customers.name,j.vehicles&&j.vehicles.make,j.vehicles&&j.vehicles.model].join(" ").toLowerCase().includes(s.toLowerCase()));
-    document.getElementById("jlst").innerHTML=a.length?a.map(j=>"<div class='item'><strong>Job #"+esc(j.job_number)+" — "+esc(j.customers&&j.customers.name||"")+"</strong><div class='meta'>"+esc([j.vehicles&&j.vehicles.year,j.vehicles&&j.vehicles.make,j.vehicles&&j.vehicles.model].filter(Boolean).join(" "))+" • "+esc(j.vehicles&&j.vehicles.plate||"")+"</div><div>"+esc(j.description)+"</div><div class='meta'>Status: <b>"+esc(j.status)+"</b> • Total: "+money(j.final_amount||j.estimate_amount)+"</div><div class='section-actions'><button data-je='"+j.id+"'>Edit</button><button data-inv='"+j.id+"'>Invoice / Print</button></div></div>").join(""):"<p class='muted'>No jobs found.</p>";
-    document.querySelectorAll("[data-je]").forEach(b=>b.onclick=function(){jobForm((r.data||[]).find(x=>x.id===b.dataset.je))});
-    document.querySelectorAll("[data-inv]").forEach(b=>b.onclick=function(){invoice(b.dataset.inv)})
-  }
-  if(r.error){document.getElementById("jlst").textContent=r.error.message;return}
-  document.getElementById("jsearch").oninput=function(){draw(this.value)};draw("")
-}
+async function parts(){let r=await db.from("job_parts").select("*,repair_jobs(job_number)").order("created_at",{ascending:false});panel("📦 Job Parts",`<button onclick="newPart()">Add Part</button><div class="scroll"><table><tr><th>Part</th><th>Job</th><th>Qty</th><th>Cost</th><th>Sell</th><th>Margin</th><th>GST</th><th>PST</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.part_name)}<br><small>${esc(x.part_number)}</small></td><td>#${x.repair_jobs?.job_number||''}</td><td>${x.quantity}</td><td>${money(x.actual_cost??x.cost)}</td><td>${money(x.sold_price??x.sell_price)}</td><td>${n(x.margin_percent).toFixed(1)}%</td><td>${money(x.sold_gst??x.gst_amount)}</td><td>${money(x.sold_pst??x.pst_amount)}</td><td><button onclick="newPart(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+async function newPart(x={}){panel("📦 "+(x.id?"Edit":"Add")+" Job Part",`<form id="partf"><label>Job<select id="pjb" required>${await jobOptions(x.job_id)}</select></label><div class="formgrid"><label>Part name<input id="pname" required value="${esc(x.part_name)}"></label><label>Part number<input id="pnum" value="${esc(x.part_number)}"></label><label>Supplier<input id="psup" value="${esc(x.supplier)}"></label><label>Quantity<input id="pqty" type="number" step=".01" value="${x.quantity||1}"></label><label>Actual cost<input id="pcost" type="number" step=".01" value="${n(x.actual_cost??x.cost)}"></label><label>Sold price<input id="psold" type="number" step=".01" value="${n(x.sold_price??x.sell_price)}"></label><label>Margin %<input id="pmargin" type="number" step=".01" value="${n(x.margin_percent)}"></label></div><label><input id="pgst" type="checkbox" ${x.gst_enabled?'checked':''}> GST 5%</label><label><input id="ppst" type="checkbox" ${x.pst_enabled?'checked':''}> PST 7%</label><button>Save</button></form>`);$("partf").onsubmit=async e=>{e.preventDefault();let sold=n($("psold").value),cost=n($("pcost").value),t=tx(sold,$("pgst").checked,$("ppst").checked),pt=tx(cost,true,true),o={job_id:$("pjb").value,part_name:$("pname").value,part_number:$("pnum").value||null,supplier:$("psup").value||null,quantity:n($("pqty").value)||1,cost,actual_cost:cost,sell_price:sold,sold_price:sold,margin_percent:n($("pmargin").value),gst_enabled:$("pgst").checked,pst_enabled:$("ppst").checked,gst_amount:t.gst,pst_amount:t.pst,purchase_gst:pt.gst,purchase_pst:pt.pst,sold_gst:t.gst,sold_pst:t.pst},r=x.id?await db.from("job_parts").update(o).eq("id",x.id):await db.from("job_parts").insert(o);if(!fail(r))parts()}}
 
-/* PARTS */
-async function parts(){
-  panelHeader("📦 Parts","Add parts to repair jobs and review job parts.","<button id='ap'>Add Part</button><button id='vp'>View Parts</button>");
-  document.getElementById("ap").onclick=partForm;document.getElementById("vp").onclick=viewParts
-}
-async function partForm(){
-  const jobs=await jobOptions();
-  panel.innerHTML="<h3>📦 Add Part</h3><form id='pf'><label>Job<select id='pj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"'>#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+" — "+esc(j.description||"")+"</option>").join("")+"</select></label><div class='form-grid'><label>Part Name<input id='pn' required></label><label>Part Number<input id='ppn'></label></div><label>Supplier<input id='ps'></label><div class='form-grid'><label>Quantity<input id='pq' type='number' min='1' value='1'></label><label>Cost ($)<input id='pc' type='number' min='0' step='0.01' value='0'></label></div><label>Selling Price ($)<input id='psp' type='number' min='0' step='0.01' value='0'></label><div class='form-grid'><label>GST 5%<select id='pgst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='ppst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><div class='section-actions'><button>Add Part</button><button type='button' id='pcc' class='secondary'>Cancel</button></div><p id='pm' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("pcc").onclick=parts;
-  document.getElementById("pf").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("job_parts").insert({job_id:document.getElementById("pj").value,part_name:document.getElementById("pn").value.trim(),part_number:document.getElementById("ppn").value.trim()||null,supplier:document.getElementById("ps").value.trim()||null,quantity:Number(document.getElementById("pq").value)||1,cost:Number(document.getElementById("pc").value)||0,sell_price:Number(document.getElementById("psp").value)||0,gst_enabled:document.getElementById("pgst").value==="true",pst_enabled:document.getElementById("ppst").value==="true",gst_amount:taxAmounts(Number(document.getElementById("psp").value)||0,document.getElementById("pgst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("psp").value)||0,false,document.getElementById("ppst").value==="true").pst});
-    const m=document.getElementById("pm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Part added ✓";setTimeout(viewParts,400)
-  }
-}
-async function viewParts(){
-  const r=await db.from("job_parts").select("*,repair_jobs(job_number,customers(name))").order("created_at",{ascending:false});
-  panel.innerHTML="<h3>📦 Parts</h3>"+((r.data||[]).map(p=>"<div class='item'><strong>"+esc(p.part_name)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+"</div><div>Qty "+p.quantity+" • Sell "+money(p.sell_price)+"</div></div>").join("")||"<p class='muted'>No parts yet.</p>");
-  panel.classList.remove("hidden");scroll()
-}
+async function catalog(){let r=await db.from("parts_catalog").select("*").order("updated_at",{ascending:false});panel("🗂️ Parts Catalog",`<button onclick="newCatalogPart()">New Catalog Part</button><div class="scroll"><table><tr><th>Part</th><th>Supplier</th><th>Cost</th><th>Margin</th><th>Sell</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.part_name)}<br><small>${esc(x.part_number)}</small></td><td>${esc(x.supplier)}</td><td>${money(x.actual_cost)}</td><td>${n(x.margin_percent).toFixed(1)}%</td><td>${money(x.sold_price)}</td><td><button onclick="newCatalogPart(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+function newCatalogPart(x={}){panel("🗂️ "+(x.id?"Edit":"New")+" Catalog Part",`<form id="pcf"><div class="formgrid"><label>Part name<input id="pcn" required value="${esc(x.part_name)}"></label><label>Part number<input id="pcnum" value="${esc(x.part_number)}"></label><label>Supplier<input id="pcs" value="${esc(x.supplier)}"></label><label>Actual cost<input id="pcc" type="number" step=".01" value="${n(x.actual_cost)}"></label><label>Margin %<input id="pcm" type="number" step=".01" value="${x.margin_percent??30}"></label><label>Sold price<input id="pcsp" type="number" step=".01" value="${n(x.sold_price)}"></label></div><label>Notes<textarea id="pcnotes">${esc(x.notes)}</textarea></label><button>Save</button></form>`);$("pcf").onsubmit=async e=>{e.preventDefault();let cost=n($("pcc").value),margin=n($("pcm").value),sold=n($("pcsp").value)||cost*(1+margin/100),pt=tx(cost,true,true),st=tx(sold,true,true),o={part_name:$("pcn").value,part_number:$("pcnum").value||null,supplier:$("pcs").value||null,actual_cost:cost,purchase_gst:pt.gst,purchase_pst:pt.pst,margin_percent:margin,sold_price:sold,sold_gst:st.gst,sold_pst:st.pst,notes:$("pcnotes").value||null,updated_at:new Date().toISOString()},r=x.id?await db.from("parts_catalog").update(o).eq("id",x.id):await db.from("parts_catalog").insert(o);if(!fail(r))catalog()}}
 
-/* PAYMENTS */
-async function payments(){
-  panelHeader("💰 Payments","Record payments and see job balances.","<button id='np'>New Payment</button><button id='vpmt'>View Payments</button>");
-  document.getElementById("np").onclick=paymentForm;document.getElementById("vpmt").onclick=viewPayments
-}
-async function paymentForm(){
-  const jobs=await jobOptions();
-  panel.innerHTML="<h3>💰 New Payment</h3><form id='payf'><label>Job<select id='payj' required><option value=''>Select job</option>"+jobs.map(j=>"<option value='"+j.id+"'>#"+j.job_number+" — "+esc(j.customers&&j.customers.name||"")+"</option>").join("")+"</select></label><label>Amount ($)<input id='paya' type='number' min='0.01' step='0.01' required></label><label>Payment Method<select id='paym'><option>cash</option><option>debit</option><option>credit</option><option>etransfer</option><option>other</option></select></label><div id='paymentTaxBox'><div class='form-grid'><label>GST 5%<select id='paygst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='paypst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><div class='meta'>Tax is optional. For cash payments, choose whether GST/PST applies.</div></div><label>Date<input id='payd' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label><label>Notes<textarea id='payn'></textarea></label><div class='section-actions'><button>Save Payment</button><button type='button' id='payc' class='secondary'>Cancel</button></div><p id='paymsg' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("payc").onclick=payments;
-  document.getElementById("paym").onchange=function(){document.getElementById("paymentTaxBox").style.opacity=this.value==="cash"?"1":".85"};
-  document.getElementById("payf").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("payments").insert({job_id:document.getElementById("payj").value,amount:Number(document.getElementById("paya").value),payment_method:document.getElementById("paym").value,payment_date:document.getElementById("payd").value,gst_enabled:document.getElementById("paygst").value==="true",pst_enabled:document.getElementById("paypst").value==="true",gst_amount:taxAmounts(Number(document.getElementById("paya").value)||0,document.getElementById("paygst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("paya").value)||0,false,document.getElementById("paypst").value==="true").pst,notes:document.getElementById("payn").value.trim()||null});
-    const m=document.getElementById("paymsg");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Payment saved ✓";loadStats();setTimeout(viewPayments,400)
-  }
-}
-async function viewPayments(){
-  const r=await db.from("payments").select("*,repair_jobs(job_number,customers(name))").order("payment_date",{ascending:false});
-  panel.innerHTML="<h3>💰 Payments</h3>"+((r.data||[]).map(p=>"<div class='item'><strong>"+money(p.amount)+" — "+esc(p.payment_method)+"</strong><div class='meta'>Job #"+esc(p.repair_jobs&&p.repair_jobs.job_number)+" • "+esc(p.repair_jobs&&p.repair_jobs.customers&&p.repair_jobs.customers.name||"")+" • "+esc(p.payment_date)+"</div></div>").join("")||"<p class='muted'>No payments yet.</p>");
-  panel.classList.remove("hidden");scroll()
-}
+async function expenses(){let r=await db.from("shop_expenses").select("*").order("expense_date",{ascending:false});panel("💵 Shop Expenses",`<button onclick="newExpense()">New Expense</button><div class="scroll"><table><tr><th>Date</th><th>Category</th><th>Vendor</th><th>Description</th><th>Amount</th><th>GST</th><th>PST</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${x.expense_date}</td><td>${esc(x.category)}</td><td>${esc(x.vendor)}</td><td>${esc(x.description)}</td><td>${money(x.amount)}</td><td>${money(x.gst_amount)}</td><td>${money(x.pst_amount)}</td><td><button onclick="newExpense(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+function newExpense(x={}){panel("💵 "+(x.id?"Edit":"New")+" Expense",`<form id="ef"><div class="formgrid"><label>Date<input id="ed" type="date" value="${x.expense_date||today()}"></label><label>Category<input id="ec" value="${esc(x.category)}"></label><label>Vendor<input id="ev" value="${esc(x.vendor)}"></label><label>Amount<input id="ea" type="number" step=".01" value="${n(x.amount)}"></label></div><label>Description<input id="edesc" value="${esc(x.description)}"></label><label><input id="eg" type="checkbox" ${n(x.gst_amount)>0?'checked':''}> GST 5%</label><label><input id="ep" type="checkbox" ${n(x.pst_amount)>0?'checked':''}> PST 7%</label><label>Notes<textarea id="en">${esc(x.notes)}</textarea></label><button>Save</button></form>`);$("ef").onsubmit=async e=>{e.preventDefault();let b=n($("ea").value),t=tx(b,$("eg").checked,$("ep").checked),o={expense_date:$("ed").value,category:$("ec").value||null,description:$("edesc").value||null,amount:b,vendor:$("ev").value||null,notes:$("en").value||null,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("shop_expenses").update(o).eq("id",x.id):await db.from("shop_expenses").insert(o);if(!fail(r)){refreshKpis();expenses()}}}
 
-/* EXPENSES */
-async function expenses(){
-  panelHeader("🧾 Shop Expenses","Track shop operating expenses.","<button id='ne'>New Expense</button><button id='ve'>View Expenses</button>");
-  document.getElementById("ne").onclick=expenseForm;document.getElementById("ve").onclick=viewExpenses
-}
-function expenseForm(){
-  panel.innerHTML="<h3>🧾 New Shop Expense</h3><form id='ef'><label>Date<input id='ed' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label><label>Category<input id='ec' placeholder='Parts, rent, supplies, utilities…'></label><label>Description<input id='exd'></label><label>Amount ($)<input id='ea' type='number' min='0' step='0.01' required></label><div class='form-grid'><label>GST 5%<select id='egst'><option value='false'>No</option><option value='true'>Yes</option></select></label><label>PST 7%<select id='epst'><option value='false'>No</option><option value='true'>Yes</option></select></label></div><label>Notes<textarea id='en'></textarea></label><div class='section-actions'><button>Save Expense</button><button type='button' id='ecc' class='secondary'>Cancel</button></div><p id='em' class='message'></p></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("ecc").onclick=expenses;
-  document.getElementById("ef").onsubmit=async function(e){
-    e.preventDefault();
-    const r=await db.from("shop_expenses").insert({expense_date:document.getElementById("ed").value,category:document.getElementById("ec").value.trim(),description:document.getElementById("exd").value.trim(),amount:Number(document.getElementById("ea").value),gst_amount:taxAmounts(Number(document.getElementById("ea").value)||0,document.getElementById("egst").value==="true",false).gst,pst_amount:taxAmounts(Number(document.getElementById("ea").value)||0,false,document.getElementById("epst").value==="true").pst,notes:document.getElementById("en").value.trim()||null});
-    const m=document.getElementById("em");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Expense saved ✓";setTimeout(viewExpenses,400)
-  }
-}
-async function viewExpenses(){
-  const r=await db.from("shop_expenses").select("*").order("expense_date",{ascending:false});
-  panel.innerHTML="<h3>🧾 Shop Expenses</h3>"+((r.data||[]).map(x=>"<div class='item'><strong>"+money(x.amount)+" — "+esc(x.category)+"</strong><div class='meta'>"+esc(x.expense_date)+" • "+esc(x.description)+"</div></div>").join("")||"<p class='muted'>No expenses yet.</p>");
-  panel.classList.remove("hidden");scroll()
-}
+async function technicians(){let r=await db.from("technicians").select("*").order("name");panel("👨‍🔧 Technicians",`<button onclick="newTech()">New Technician</button><div class="scroll"><table><tr><th>Name</th><th>Cost/hr</th><th>Bill/hr</th><th>Active</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.cost_per_hour)}</td><td>${money(x.default_bill_rate)}</td><td>${x.active?'Yes':'No'}</td><td><button onclick="newTech(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+function newTech(x={}){panel("👨‍🔧 "+(x.id?"Edit":"New")+" Technician",`<form id="tf"><div class="formgrid"><label>Name<input id="tn" required value="${esc(x.name)}"></label><label>Cost/hour<input id="tc" type="number" step=".01" value="${n(x.cost_per_hour)}"></label><label>Default bill/hour<input id="tb" type="number" step=".01" value="${n(x.default_bill_rate)}"></label></div><label><input id="ta" type="checkbox" ${x.active!==false?'checked':''}> Active</label><button>Save</button></form>`);$("tf").onsubmit=async e=>{e.preventDefault();let o={name:$("tn").value,cost_per_hour:n($("tc").value),default_bill_rate:n($("tb").value),active:$("ta").checked},r=x.id?await db.from("technicians").update(o).eq("id",x.id):await db.from("technicians").insert(o);if(!fail(r))technicians()}}
+async function hours(){let r=await db.from("technician_hours").select("*,technicians(name),repair_jobs(job_number),invoices(invoice_number)").order("work_date",{ascending:false}),rows=r.data||[],cost=rows.reduce((s,x)=>s+n(x.hours)*n(x.cost_rate),0),bill=rows.reduce((s,x)=>s+n(x.hours)*n(x.billed_rate),0);panel("⏱️ Technician Hours",`<div class="kpis"><div class="kpi">Hours<b>${rows.reduce((s,x)=>s+n(x.hours),0).toFixed(2)}</b></div><div class="kpi">Labour Cost<b>${money(cost)}</b></div><div class="kpi">Labour Billed<b>${money(bill)}</b></div><div class="kpi">Labour Profit<b>${money(bill-cost)}</b></div></div><button onclick="newHours()">Add Hours</button><div class="scroll"><table><tr><th>Date</th><th>Tech</th><th>Job</th><th>Invoice</th><th>Hours</th><th>Cost</th><th>Billed</th><th>Profit</th><th></th></tr>${rows.map(x=>`<tr><td>${x.work_date}</td><td>${esc(x.technicians?.name)}</td><td>${x.repair_jobs?.job_number?'#'+x.repair_jobs.job_number:''}</td><td>${x.invoices?.invoice_number?'#'+x.invoices.invoice_number:''}</td><td>${x.hours}</td><td>${money(n(x.hours)*n(x.cost_rate))}</td><td>${money(n(x.hours)*n(x.billed_rate))}</td><td>${money(n(x.hours)*(n(x.billed_rate)-n(x.cost_rate)))}</td><td><button onclick="newHours(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+async function newHours(x={}){let tr=await db.from("technicians").select("*").eq("active",true).order("name");panel("⏱️ "+(x.id?"Edit":"Add")+" Hours",`<form id="hf"><label>Technician<select id="ht" required>${(tr.data||[]).map(t=>`<option value="${t.id}" data-cost="${t.cost_per_hour}" data-bill="${t.default_bill_rate}" ${t.id===x.technician_id?'selected':''}>${esc(t.name)}</option>`).join('')}</select></label><label>Job<select id="hj">${await jobOptions(x.job_id)}</select></label><label>Invoice<select id="hi">${await invoiceOptions(x.invoice_id)}</select></label><div class="formgrid"><label>Date<input id="hd" type="date" value="${x.work_date||today()}"></label><label>Hours<input id="hh" type="number" step=".25" value="${n(x.hours)}"></label><label>Cost rate<input id="hc" type="number" step=".01" value="${n(x.cost_rate)}"></label><label>Billed rate<input id="hb" type="number" step=".01" value="${n(x.billed_rate)}"></label></div><label>Notes<textarea id="hn">${esc(x.notes)}</textarea></label><button>Save</button></form>`);function rates(){let o=$("ht").selectedOptions[0];if(!x.id){$("hc").value=o?.dataset.cost||0;$("hb").value=o?.dataset.bill||0}}$("ht").onchange=rates;if(!x.id)rates();$("hf").onsubmit=async e=>{e.preventDefault();let o={technician_id:$("ht").value||null,job_id:$("hj").value||null,invoice_id:$("hi").value||null,work_date:$("hd").value,hours:n($("hh").value),cost_rate:n($("hc").value),billed_rate:n($("hb").value),notes:$("hn").value||null},r=x.id?await db.from("technician_hours").update(o).eq("id",x.id):await db.from("technician_hours").insert(o);if(!fail(r))hours()}}
 
-/* REPORTS */
-async function reports(){
-  panelHeader("📊 Weekend Reports","Create and review manager reports.","<button id='nr'>Create Report</button><button id='vr'>View Reports</button>");
-  document.getElementById("nr").onclick=reportForm;document.getElementById("vr").onclick=viewReports
-}
-function reportForm(){
-  panel.innerHTML="<h3>📊 Weekend Reports</h3><p class='muted'>Create a weekend report and automatically separate GST/PST for payments and expenses.</p><form id='rf'>"+
-  "<label>Report Date<input id='rd' type='date' value='"+new Date().toISOString().slice(0,10)+"'></label>"+
-  "<label>Jobs Completed<input id='rj' type='number' min='0' value='0'></label>"+
-  "<label>Revenue ($)<input id='rr' type='number' min='0' step='0.01' value='0'></label>"+
-  "<div class='form-grid'><label>Parts Expense ($)<input id='rp' type='number' min='0' step='0.01' value='0'></label><label>Labour Expense ($)<input id='rl' type='number' min='0' step='0.01' value='0'></label></div>"+
-  "<label>Other Expense ($)<input id='ro' type='number' min='0' step='0.01' value='0'></label>"+
-  "<label>Outstanding Amount ($)<input id='rout' type='number' min='0' step='0.01' value='0'></label>"+
-  "<label>Manager Notes<textarea id='rn'></textarea></label>"+
-  "<div class='section-actions'><button>Save Report</button><button type='button' id='taxpreview' class='secondary'>Generate GST/PST Tax Report</button><button type='button' id='rcc' class='secondary'>Cancel</button></div>"+
-  "<p id='rm' class='message'></p><div id='taxresult'></div></form>";
-  panel.classList.remove("hidden");scroll();document.getElementById("rcc").onclick=reports;
-  document.getElementById("taxpreview").onclick=generateTaxReport;
-  document.getElementById("rf").onsubmit=async function(e){
-    e.preventDefault();
-    const d={report_date:document.getElementById("rd").value,jobs_completed:Number(document.getElementById("rj").value)||0,revenue:Number(document.getElementById("rr").value)||0,parts_expense:Number(document.getElementById("rp").value)||0,labour_expense:Number(document.getElementById("rl").value)||0,other_expense:Number(document.getElementById("ro").value)||0,outstanding_amount:Number(document.getElementById("rout").value)||0,manager_notes:document.getElementById("rn").value.trim()||null};
-    const tax=await calculateTaxForDate(document.getElementById("rd").value,document.getElementById("rd").value);
-    if(tax.error){document.getElementById("rm").textContent=tax.error;return}
-    d.payment_gst=tax.paymentGst;d.payment_pst=tax.paymentPst;d.expense_gst=tax.expenseGst;d.expense_pst=tax.expensePst;d.net_gst=tax.paymentGst-tax.expenseGst;d.net_pst=tax.paymentPst-tax.expensePst;
-    const r=await db.from("weekend_reports").upsert(d,{onConflict:"report_date"});
-    const m=document.getElementById("rm");if(r.error){m.textContent=r.error.message;return}m.style.color="#166534";m.textContent="Report saved ✓";setTimeout(viewReports,400)
-  }
-}
-async function calculateTaxForDate(from,to){
-  const [p,e]=await Promise.all([
-    db.from("payments").select("amount,gst_amount,pst_amount,payment_date").gte("payment_date",from).lte("payment_date",to),
-    db.from("shop_expenses").select("amount,gst_amount,pst_amount,expense_date").gte("expense_date",from).lte("expense_date",to)
-  ]);
-  if(p.error||e.error)return{error:(p.error||e.error).message};
-  return{paymentGst:(p.data||[]).reduce((s,x)=>s+Number(x.gst_amount||0),0),paymentPst:(p.data||[]).reduce((s,x)=>s+Number(x.pst_amount||0),0),expenseGst:(e.data||[]).reduce((s,x)=>s+Number(x.gst_amount||0),0),expensePst:(e.data||[]).reduce((s,x)=>s+Number(x.pst_amount||0),0)}
-}
-async function generateTaxReport(){
-  const d=document.getElementById("rd").value;
-  const tax=await calculateTaxForDate(d,d);if(tax.error){document.getElementById("taxresult").innerHTML="<p class='message'>"+esc(tax.error)+"</p>";return}
-  document.getElementById("taxresult").innerHTML="<div class='item'><strong>GST / PST Tax Report — "+esc(d)+"</strong><div class='meta'>Payments</div><div>GST: "+money(tax.paymentGst)+" • PST: "+money(tax.paymentPst)+"</div><div class='meta' style='margin-top:8px'>Expenses</div><div>GST: "+money(tax.expenseGst)+" • PST: "+money(tax.expensePst)+"</div><div class='meta' style='margin-top:8px'>Net tax</div><div><b>GST: "+money(tax.paymentGst-tax.expenseGst)+" • PST: "+money(tax.paymentPst-tax.expensePst)+"</b></div></div>"
-}
-async function viewReports(){
-  const r=await db.from("weekend_reports").select("*").order("report_date",{ascending:false});
-  panel.innerHTML="<h3>📊 Weekend Reports</h3>"+((r.data||[]).map(x=>"<div class='item'><strong>"+esc(x.report_date)+" — Revenue "+money(x.revenue)+"</strong><div class='meta'>Jobs: "+x.jobs_completed+" • Parts: "+money(x.parts_expense)+" • Labour: "+money(x.labour_expense)+" • Other: "+money(x.other_expense)+" • Outstanding: "+money(x.outstanding_amount)+"</div><div class='meta' style='margin-top:8px'><b>Tax on payments:</b> GST "+money(x.payment_gst)+" • PST "+money(x.payment_pst)+"</div><div class='meta'><b>Tax on expenses:</b> GST "+money(x.expense_gst)+" • PST "+money(x.expense_pst)+"</div><div class='meta'><b>Net tax:</b> GST "+money(x.net_gst)+" • PST "+money(x.net_pst)+"</div><div>"+esc(x.manager_notes||"")+"</div></div>").join("")||"<p class='muted'>No reports yet.</p>");
-  panel.classList.remove("hidden");scroll()
-}
+async function estimates(){let r=await db.from("estimates").select("*,customers(name),vehicles(year,make,model)").order("created_at",{ascending:false});panel("📝 Estimates",`<button onclick="newEstimate()">New Estimate</button><div class="scroll"><table><tr><th>#</th><th>Date</th><th>Customer</th><th>Vehicle</th><th>Status</th><th>Total</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>#${x.estimate_number}</td><td>${x.estimate_date}</td><td>${esc(x.customers?.name)}</td><td>${esc([x.vehicles?.year,x.vehicles?.make,x.vehicles?.model].filter(Boolean).join(' '))}</td><td>${esc(x.status)}</td><td>${money(x.total)}</td><td><div class="actions"><button onclick="editEstimate(unpack('${pack(x)}'))">Open</button><button class="secondary" onclick="convertEstimate('${x.id}')">To Invoice</button></div></td></tr>`).join('')}</table></div>`)}
+async function newEstimate(x={}){panel("📝 "+(x.id?`Estimate #${x.estimate_number}`:"New Estimate"),`<form id="estf"><label>Customer<select id="ecus" required>${await customerOptions(x.customer_id)}</select></label><label>Vehicle<select id="eveh"></select></label><div class="formgrid"><label>Status<select id="estatus">${['Draft','Sent','Approved','Declined','Expired'].map(s=>`<option ${s===(x.status||'Draft')?'selected':''}>${s}</option>`).join('')}</select></label><label>Date<input id="edate" type="date" value="${x.estimate_date||today()}"></label><label>Valid until<input id="evalid" type="date" value="${x.valid_until||''}"></label></div><label>Notes<textarea id="enotes">${esc(x.notes)}</textarea></label><button>Save Header</button></form><div id="estItems"></div>`);async function lv(){$("eveh").innerHTML=await vehicleOptions($("ecus").value,x.vehicle_id)}$("ecus").onchange=lv;await lv();$("estf").onsubmit=async e=>{e.preventDefault();let o={customer_id:$("ecus").value||null,vehicle_id:$("eveh").value||null,status:$("estatus").value,estimate_date:$("edate").value,valid_until:$("evalid").value||null,notes:$("enotes").value||null,updated_at:new Date().toISOString()},r=x.id?await db.from("estimates").update(o).eq("id",x.id).select().single():await db.from("estimates").insert(o).select().single();if(fail(r))return;editEstimate(r.data)};if(x.id)await renderEstimateItems(x)}
+async function editEstimate(x){await newEstimate(x)}
+async function renderEstimateItems(est){let r=await db.from("estimate_items").select("*").eq("estimate_id",est.id).order("created_at"),a=r.data||[],sub=a.reduce((s,i)=>s+n(i.quantity)*n(i.unit_price),0),g=sum(a,'gst_amount'),p=sum(a,'pst_amount'),tot=sub+g+p;await db.from("estimates").update({subtotal:sub,gst_amount:g,pst_amount:p,total:tot,updated_at:new Date().toISOString()}).eq("id",est.id);$("estItems").innerHTML=`<div class="subcard"><div class="actions"><button onclick="newEstimateItem('${est.id}')">Add Item</button><button class="secondary" onclick="convertEstimate('${est.id}')">Convert to Invoice</button></div><div class="kpis"><div class="kpi">Subtotal<b>${money(sub)}</b></div><div class="kpi">GST<b>${money(g)}</b></div><div class="kpi">PST<b>${money(p)}</b></div><div class="kpi">Total<b>${money(tot)}</b></div></div><div class="scroll"><table><tr><th>Type</th><th>Description</th><th>Qty</th><th>Cost</th><th>Price</th><th>GST</th><th>PST</th><th></th></tr>${a.map(i=>`<tr><td>${esc(i.item_type)}</td><td>${esc(i.description)}</td><td>${i.quantity}</td><td>${money(i.actual_cost)}</td><td>${money(i.unit_price)}</td><td>${money(i.gst_amount)}</td><td>${money(i.pst_amount)}</td><td><button onclick="newEstimateItem('${est.id}',unpack('${pack(i)}'))">Edit</button></td></tr>`).join('')}</table></div></div>`}
+async function newEstimateItem(estId,x={}){panel("📝 Estimate Item",`<form id="eif"><div class="formgrid"><label>Type<select id="eit">${['part','labour','supply','other'].map(t=>`<option ${t===x.item_type?'selected':''}>${t}</option>`).join('')}</select></label><label>Description<input id="eid" required value="${esc(x.description)}"></label><label>Quantity<input id="eiq" type="number" step=".01" value="${x.quantity||1}"></label><label>Actual cost<input id="eic" type="number" step=".01" value="${n(x.actual_cost)}"></label><label>Unit price<input id="eip" type="number" step=".01" value="${n(x.unit_price)}"></label><label>Margin %<input id="eim" type="number" step=".01" value="${n(x.margin_percent)}"></label></div><label><input id="eig" type="checkbox" ${x.gst_enabled?'checked':''}> GST 5%</label><label><input id="eips" type="checkbox" ${x.pst_enabled?'checked':''}> PST 7%</label><button>Save Item</button></form>`);$("eif").onsubmit=async e=>{e.preventDefault();let q=n($("eiq").value)||1,price=n($("eip").value),t=tx(q*price,$("eig").checked,$("eips").checked),o={estimate_id:estId,item_type:$("eit").value,description:$("eid").value,quantity:q,actual_cost:n($("eic").value),unit_price:price,margin_percent:n($("eim").value),gst_enabled:$("eig").checked,pst_enabled:$("eips").checked,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("estimate_items").update(o).eq("id",x.id):await db.from("estimate_items").insert(o);if(fail(r))return;let h=await db.from("estimates").select("*").eq("id",estId).single();editEstimate(h.data)}}
+async function convertEstimate(id){let e=await db.from("estimates").select("*").eq("id",id).single();if(fail(e))return;let existing=await db.from("invoices").select("id,invoice_number").eq("estimate_id",id).limit(1);if((existing.data||[]).length)return alert("Already converted to invoice #"+existing.data[0].invoice_number);let inv=await db.from("invoices").insert({estimate_id:id,customer_id:e.data.customer_id,vehicle_id:e.data.vehicle_id,status:'Unpaid',invoice_date:today(),subtotal:e.data.subtotal,gst_amount:e.data.gst_amount,pst_amount:e.data.pst_amount,total:e.data.total,notes:e.data.notes}).select().single();if(fail(inv))return;let it=await db.from("estimate_items").select("item_type,description,quantity,actual_cost,unit_price,margin_percent,gst_enabled,pst_enabled,gst_amount,pst_amount,source_part_id").eq("estimate_id",id);if((it.data||[]).length){let rows=it.data.map(z=>({...z,invoice_id:inv.data.id}));let rr=await db.from("invoice_items").insert(rows);if(fail(rr))return}await db.from("estimates").update({status:'Approved',updated_at:new Date().toISOString()}).eq("id",id);alert("Invoice #"+inv.data.invoice_number+" created");invoices()}
 
-/* INVOICE */
-async function invoice(jobId){
-  const [jr,pr,payr]=await Promise.all([
-    db.from("repair_jobs").select("*,customers(name,phone,email,address),vehicles(year,make,model,trim,vin,plate,mileage)").eq("id",jobId).single(),
-    db.from("job_parts").select("*").eq("job_id",jobId).order("created_at"),
-    db.from("payments").select("*").eq("job_id",jobId).order("payment_date")
-  ]);
-  if(jr.error){panel.innerHTML="<p class='message'>"+esc(jr.error.message)+"</p>";return}
-  const j=jr.data,c=j.customers||{},v=j.vehicles||{},parts=pr.data||[],pays=payr.data||[];
-  const partsTotal=parts.reduce((s,x)=>s+Number(x.sell_price||x.cost||0)*Number(x.quantity||1),0);
-  const partsGst=parts.reduce((s,x)=>s+Number(x.gst_amount||0),0),partsPst=parts.reduce((s,x)=>s+Number(x.pst_amount||0),0);
-  const jobBase=Number(j.final_amount||0)||Number(j.estimate_amount||0);
-  const jobGst=Number(j.gst_amount||0),jobPst=Number(j.pst_amount||0);
-  const subtotal=jobBase||partsTotal+Number(j.labour_amount||0);
-  const taxGst=jobGst+partsGst,taxPst=jobPst+partsPst;
-  const total=subtotal+taxGst+taxPst;
-  const paid=pays.reduce((s,x)=>s+Number(x.amount||0),0),balance=Math.max(total-paid,0);
-  const veh=[v.year,v.make,v.model,v.trim].filter(Boolean).join(" ");
+async function invoices(){let r=await db.from("invoices").select("*,customers(name),vehicles(year,make,model)").order("created_at",{ascending:false}),pay=await db.from("payments").select("invoice_id,amount").not("invoice_id","is",null),pm={};(pay.data||[]).forEach(x=>pm[x.invoice_id]=(pm[x.invoice_id]||0)+n(x.amount));panel("🧾 Invoices",`<button onclick="newInvoice()">New Direct Invoice</button><div class="scroll"><table><tr><th>#</th><th>Date</th><th>Customer</th><th>Status</th><th>Total</th><th>Paid</th><th>Balance</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>#${x.invoice_number}</td><td>${x.invoice_date}</td><td>${esc(x.customers?.name)}</td><td>${esc(x.status)}</td><td>${money(x.total)}</td><td>${money(pm[x.id]||0)}</td><td>${money(Math.max(0,n(x.total)-n(pm[x.id])))}</td><td><button onclick="editInvoice(unpack('${pack(x)}'))">Open</button></td></tr>`).join('')}</table></div>`)}
+async function newInvoice(x={}){panel("🧾 "+(x.id?`Invoice #${x.invoice_number}`:"New Invoice"),`<form id="ivf"><label>Customer<select id="ivc" required>${await customerOptions(x.customer_id)}</select></label><label>Vehicle<select id="ivv"></select></label><label>Job<select id="ivj">${await jobOptions(x.job_id)}</select></label><div class="formgrid"><label>Status<select id="ivs">${['Unpaid','Partially Paid','Paid','Void'].map(s=>`<option ${s===(x.status||'Unpaid')?'selected':''}>${s}</option>`).join('')}</select></label><label>Invoice Date<input id="ivd" type="date" value="${x.invoice_date||today()}"></label><label>Due Date<input id="ivdue" type="date" value="${x.due_date||''}"></label></div><label>Notes<textarea id="ivn">${esc(x.notes)}</textarea></label><button>Save Header</button></form><div id="invoiceItems"></div>`);async function lv(){$("ivv").innerHTML=await vehicleOptions($("ivc").value,x.vehicle_id)}$("ivc").onchange=lv;await lv();$("ivf").onsubmit=async e=>{e.preventDefault();let o={customer_id:$("ivc").value||null,vehicle_id:$("ivv").value||null,job_id:$("ivj").value||null,status:$("ivs").value,invoice_date:$("ivd").value,due_date:$("ivdue").value||null,notes:$("ivn").value||null,updated_at:new Date().toISOString()},r=x.id?await db.from("invoices").update(o).eq("id",x.id).select().single():await db.from("invoices").insert(o).select().single();if(fail(r))return;editInvoice(r.data)};if(x.id)await renderInvoiceItems(x)}
+async function editInvoice(x){await newInvoice(x)}
+async function renderInvoiceItems(inv){let r=await db.from("invoice_items").select("*").eq("invoice_id",inv.id).order("created_at"),a=r.data||[],sub=a.reduce((s,i)=>s+n(i.quantity)*n(i.unit_price),0),g=sum(a,'gst_amount'),p=sum(a,'pst_amount'),tot=sub+g+p,pay=await db.from("payments").select("amount").eq("invoice_id",inv.id),paid=sum(pay.data,'amount'),bal=Math.max(0,tot-paid),status=tot>0&&bal<=.009?'Paid':paid>0?'Partially Paid':inv.status==='Void'?'Void':'Unpaid';await db.from("invoices").update({subtotal:sub,gst_amount:g,pst_amount:p,total:tot,status,updated_at:new Date().toISOString()}).eq("id",inv.id);$("invoiceItems").innerHTML=`<div class="subcard"><div class="actions"><button onclick="newInvoiceItem('${inv.id}')">Add Item</button><button class="secondary" onclick="newPayment({invoice_id:'${inv.id}',job_id:'${inv.job_id||''}'})">Add Payment</button><button class="light" onclick="printInvoice('${inv.id}')">Print</button><button class="light" onclick="shareInvoice('${inv.id}')">Share</button></div><div class="kpis"><div class="kpi">Subtotal<b>${money(sub)}</b></div><div class="kpi">Taxes<b>${money(g+p)}</b></div><div class="kpi">Total<b>${money(tot)}</b></div><div class="kpi">Paid<b>${money(paid)}</b></div><div class="kpi">Balance<b>${money(bal)}</b></div></div><div class="scroll"><table><tr><th>Type</th><th>Description</th><th>Qty</th><th>Cost</th><th>Price</th><th>GST</th><th>PST</th><th></th></tr>${a.map(i=>`<tr><td>${esc(i.item_type)}</td><td>${esc(i.description)}</td><td>${i.quantity}</td><td>${money(i.actual_cost)}</td><td>${money(i.unit_price)}</td><td>${money(i.gst_amount)}</td><td>${money(i.pst_amount)}</td><td><button onclick="newInvoiceItem('${inv.id}',unpack('${pack(i)}'))">Edit</button></td></tr>`).join('')}</table></div></div>`}
+async function newInvoiceItem(invId,x={}){panel("🧾 Invoice Item",`<form id="iif"><div class="formgrid"><label>Type<select id="iit">${['part','labour','supply','other'].map(t=>`<option ${t===x.item_type?'selected':''}>${t}</option>`).join('')}</select></label><label>Description<input id="iid" required value="${esc(x.description)}"></label><label>Quantity<input id="iiq" type="number" step=".01" value="${x.quantity||1}"></label><label>Actual cost<input id="iic" type="number" step=".01" value="${n(x.actual_cost)}"></label><label>Unit price<input id="iip" type="number" step=".01" value="${n(x.unit_price)}"></label><label>Margin %<input id="iim" type="number" step=".01" value="${n(x.margin_percent)}"></label></div><label><input id="iig" type="checkbox" ${x.gst_enabled?'checked':''}> GST 5%</label><label><input id="iips" type="checkbox" ${x.pst_enabled?'checked':''}> PST 7%</label><button>Save Item</button></form>`);$("iif").onsubmit=async e=>{e.preventDefault();let q=n($("iiq").value)||1,price=n($("iip").value),t=tx(q*price,$("iig").checked,$("iips").checked),o={invoice_id:invId,item_type:$("iit").value,description:$("iid").value,quantity:q,actual_cost:n($("iic").value),unit_price:price,margin_percent:n($("iim").value),gst_enabled:$("iig").checked,pst_enabled:$("iips").checked,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("invoice_items").update(o).eq("id",x.id):await db.from("invoice_items").insert(o);if(fail(r))return;let h=await db.from("invoices").select("*").eq("id",invId).single();editInvoice(h.data)}}
+async function printInvoice(id){let r=await db.from("invoices").select("*,customers(*),vehicles(*)").eq("id",id).single(),it=await db.from("invoice_items").select("*").eq("invoice_id",id),p=await db.from("payments").select("amount").eq("invoice_id",id);if(fail(r))return;let x=r.data,w=window.open('','_blank'),items=it.data||[],paid=sum(p.data,'amount');w.document.write(`<html><head><title>Invoice #${x.invoice_number}</title><style>body{font-family:Arial;padding:30px}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}.r{text-align:right}</style></head><body><h1>Oakbank Service Centre</h1><h2>Invoice #${x.invoice_number}</h2><p><b>Customer:</b> ${esc(x.customers?.name)}<br><b>Phone:</b> ${esc(x.customers?.phone)}<br><b>Vehicle:</b> ${esc([x.vehicles?.year,x.vehicles?.make,x.vehicles?.model].filter(Boolean).join(' '))}</p><table><tr><th>Description</th><th>Qty</th><th>Price</th><th>Total</th></tr>${items.map(i=>`<tr><td>${esc(i.description)}</td><td>${i.quantity}</td><td>${money(i.unit_price)}</td><td>${money(n(i.quantity)*n(i.unit_price)+n(i.gst_amount)+n(i.pst_amount))}</td></tr>`).join('')}</table><p class="r">Subtotal ${money(x.subtotal)}<br>GST ${money(x.gst_amount)}<br>PST ${money(x.pst_amount)}<br><b>Total ${money(x.total)}</b><br>Paid ${money(paid)}<br><b>Balance ${money(Math.max(0,n(x.total)-paid))}</b></p></body></html>`);w.document.close();w.focus();w.print()}
+async function shareInvoice(id){let r=await db.from("invoices").select("invoice_number,total").eq("id",id).single();if(fail(r))return;let text=`Oakbank Service Centre Invoice #${r.data.invoice_number} — Total ${money(r.data.total)}`;if(navigator.share)await navigator.share({title:`Invoice #${r.data.invoice_number}`,text});else{await navigator.clipboard.writeText(text);alert("Invoice summary copied")}}
 
-  panel.innerHTML="<div class='invoice'>"+
-  "<div class='invoice-head'><div><div class='eyebrow'>OAKBANK SERVICE CENTRE</div><div class='invoice-title'>INVOICE</div></div><div><b>Job #"+esc(j.job_number)+"</b><br><span class='meta'>Date: "+esc(j.date_received)+"</span></div></div>"+
-  "<div class='invoice-grid'><div><b>Customer</b><br>"+esc(c.name)+"<br>"+esc(c.phone||"")+(c.email?"<br>"+esc(c.email):"")+(c.address?"<br>"+esc(c.address):"")+"</div>"+
-  "<div><b>Vehicle</b><br>"+esc(veh)+"<br>Plate: "+esc(v.plate||"")+(v.vin?"<br>VIN: "+esc(v.vin):"")+(v.mileage?"<br>Mileage: "+esc(v.mileage):"")+"</div></div>"+
-  "<b>Repair Description</b><p>"+esc(j.description)+"</p>"+
-  "<table class='invoice-table'><thead><tr><th>Description</th><th>Qty</th><th>Amount</th></tr></thead><tbody>"+
-  (parts.map(x=>"<tr><td>"+esc(x.part_name)+(x.part_number?"<br><small>"+esc(x.part_number)+"</small>":"")+"</td><td>"+x.quantity+"</td><td>"+money(Number(x.sell_price||x.cost||0)*Number(x.quantity||1))+"</td></tr>").join("")||"")+
-  "<tr><td>Labour</td><td>—</td><td>"+money(j.labour_amount)+"</td></tr></tbody></table>"+
-  "<div class='invoice-total'><div><span>Subtotal</span><span>"+money(subtotal)+"</span></div><div><span>GST 5%</span><span>"+money(taxGst)+"</span></div><div><span>PST 7%</span><span>"+money(taxPst)+"</span></div><div><span>Total</span><span>"+money(total)+"</span></div><div><span>Paid</span><span>"+money(paid)+"</span></div><div class='grand'><span>Balance Due</span><span>"+money(balance)+"</span></div></div>"+
-  (pays.length?"<p class='meta'><b>Payments:</b> "+pays.map(x=>esc(x.payment_method)+" "+money(x.amount)+" ("+esc(x.payment_date)+")").join(" • ")+"</p>":"")+
-  (j.notes?"<p><b>Notes:</b> "+esc(j.notes)+"</p>":"")+
-  "<div class='invoice-actions'><button id='print'>🖨️ Print Invoice</button><button id='share' class='secondary'>📤 Share Invoice</button><button id='back' class='secondary'>Back to Jobs</button></div></div>";
-  panel.classList.remove("hidden");scroll();
+async function supplies(){let r=await db.from("shop_supplies").select("*,repair_jobs(job_number),invoices(invoice_number),estimates(estimate_number)").order("created_at",{ascending:false});panel("🧰 Shop Supplies",`<button onclick="newSupply()">New Supply</button><div class="scroll"><table><tr><th>Description</th><th>Job</th><th>Estimate</th><th>Invoice</th><th>Cost</th><th>Sell</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.description)}</td><td>${x.repair_jobs?.job_number?'#'+x.repair_jobs.job_number:''}</td><td>${x.estimates?.estimate_number?'#'+x.estimates.estimate_number:''}</td><td>${x.invoices?.invoice_number?'#'+x.invoices.invoice_number:''}</td><td>${money(x.actual_cost)}</td><td>${money(x.sold_price)}</td><td><button onclick="newSupply(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+async function newSupply(x={}){let er=await db.from("estimates").select("id,estimate_number").order("created_at",{ascending:false});panel("🧰 "+(x.id?"Edit":"New")+" Supply",`<form id="sf"><label>Job<select id="sj">${await jobOptions(x.job_id)}</select></label><label>Estimate<select id="se"><option value="">None</option>${(er.data||[]).map(z=>`<option value="${z.id}" ${z.id===x.estimate_id?'selected':''}>#${z.estimate_number}</option>`).join('')}</select></label><label>Invoice<select id="si">${await invoiceOptions(x.invoice_id)}</select></label><label>Description<input id="sd" required value="${esc(x.description)}"></label><div class="formgrid"><label>Actual cost<input id="sc" type="number" step=".01" value="${n(x.actual_cost)}"></label><label>Sold price<input id="ss" type="number" step=".01" value="${n(x.sold_price)}"></label></div><button>Save</button></form>`);$("sf").onsubmit=async e=>{e.preventDefault();let c=n($("sc").value),s=n($("ss").value),ct=tx(c,true,true),st=tx(s,true,true),o={job_id:$("sj").value||null,estimate_id:$("se").value||null,invoice_id:$("si").value||null,description:$("sd").value,actual_cost:c,sold_price:s,purchase_gst:ct.gst,purchase_pst:ct.pst,sold_gst:st.gst,sold_pst:st.pst},r=x.id?await db.from("shop_supplies").update(o).eq("id",x.id):await db.from("shop_supplies").insert(o);if(!fail(r))supplies()}}
 
-  document.getElementById("print").onclick=function(){window.print()};
-  document.getElementById("share").onclick=function(){
-    const t="Oakbank Service Centre - Invoice\nJob #"+j.job_number+"\nCustomer: "+(c.name||"")+"\nVehicle: "+veh+"\nRepair: "+(j.description||"")+"\nSubtotal: "+money(subtotal)+"\nGST: "+money(taxGst)+"\nPST: "+money(taxPst)+"\nTotal: "+money(total)+"\nPaid: "+money(paid)+"\nBalance Due: "+money(balance);
-    if(navigator.share)navigator.share({title:"Invoice #"+j.job_number,text:t}).catch(function(){});
-    else if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){alert("Invoice summary copied. You can paste it into WhatsApp, text or email.")});
-  };
-  document.getElementById("back").onclick=viewJobs;
-}
+async function fixed(){let r=await db.from("fixed_expenses").select("*").order("expense_date",{ascending:false});panel("🏢 Fixed Expenses",`<button onclick="newFixed()">New Fixed Expense</button><div class="scroll"><table><tr><th>Name</th><th>Category</th><th>Amount</th><th>Frequency</th><th>GST</th><th>PST</th><th>Active</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${money(x.amount)}</td><td>${esc(x.frequency)}</td><td>${money(x.gst_amount)}</td><td>${money(x.pst_amount)}</td><td>${x.active?'Yes':'No'}</td><td><button onclick="newFixed(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+function newFixed(x={}){panel("🏢 "+(x.id?"Edit":"New")+" Fixed Expense",`<form id="ff"><div class="formgrid"><label>Name<input id="fn" required value="${esc(x.name)}"></label><label>Category<input id="fc" value="${esc(x.category)}"></label><label>Amount<input id="fa" type="number" step=".01" value="${n(x.amount)}"></label><label>Frequency<select id="ffr">${['weekly','monthly','quarterly','yearly','one-time'].map(v=>`<option ${v===(x.frequency||'monthly')?'selected':''}>${v}</option>`).join('')}</select></label><label>Expense date<input id="fd" type="date" value="${x.expense_date||today()}"></label></div><label><input id="fg" type="checkbox" ${n(x.gst_amount)>0?'checked':''}> GST 5%</label><label><input id="fp" type="checkbox" ${n(x.pst_amount)>0?'checked':''}> PST 7%</label><label><input id="fact" type="checkbox" ${x.active!==false?'checked':''}> Active</label><label>Notes<textarea id="fnotes">${esc(x.notes)}</textarea></label><button>Save</button></form>`);$("ff").onsubmit=async e=>{e.preventDefault();let a=n($("fa").value),t=tx(a,$("fg").checked,$("fp").checked),o={name:$("fn").value,category:$("fc").value||null,amount:a,frequency:$("ffr").value,expense_date:$("fd").value,gst_amount:t.gst,pst_amount:t.pst,active:$("fact").checked,notes:$("fnotes").value||null,updated_at:new Date().toISOString()},r=x.id?await db.from("fixed_expenses").update(o).eq("id",x.id):await db.from("fixed_expenses").insert(o);if(!fail(r))fixed()}}
 
-const handlers={jobs:jobs,customers:customers,vehicles:vehicles,payments:payments,parts:parts,expenses:expenses,reports:reports};
-document.querySelectorAll(".tile").forEach(function(b){b.onclick=function(){handlers[b.dataset.s]()}});
-(async function(){const r=await db.auth.getSession();if(r.data&&r.data.session)dashboard();else loginScreen()})();
+async function photos(){let r=await db.from("job_photos").select("*,repair_jobs(job_number)").order("created_at",{ascending:false});panel("📷 Job Photos",`<button onclick="newPhoto()">Add Photo Record</button><p class="muted">This screen stores photo URLs. It is ready for a Supabase Storage bucket when you decide to add direct phone uploads.</p><div class="scroll"><table><tr><th>Job</th><th>Type</th><th>Description</th><th>Photo</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>#${x.repair_jobs?.job_number||''}</td><td>${esc(x.photo_type)}</td><td>${esc(x.description)}</td><td><a href="${esc(x.photo_url)}" target="_blank">Open</a></td><td><button onclick="newPhoto(unpack('${pack(x)}'))">Edit</button></td></tr>`).join('')}</table></div>`)}
+async function newPhoto(x={}){panel("📷 "+(x.id?"Edit":"Add")+" Photo",`<form id="phf"><label>Job<select id="phj" required>${await jobOptions(x.job_id)}</select></label><label>Type<select id="pht">${['before','during','after','other'].map(t=>`<option ${t===x.photo_type?'selected':''}>${t}</option>`).join('')}</select></label><label>Photo URL<input id="phu" type="url" required value="${esc(x.photo_url)}"></label><label>Description<textarea id="phd">${esc(x.description)}</textarea></label><button>Save</button></form>`);$("phf").onsubmit=async e=>{e.preventDefault();let o={job_id:$("phj").value,photo_type:$("pht").value,photo_url:$("phu").value,description:$("phd").value||null},r=x.id?await db.from("job_photos").update(o).eq("id",x.id):await db.from("job_photos").insert(o);if(!fail(r))photos()}}
+
+async function suppliers(){let r=await db.from("supplier_invoices").select("*").order("invoice_date",{ascending:false});panel("📄 Supplier Invoices",`<button onclick="newSupplierInvoice()">New Supplier Invoice</button><div class="scroll"><table><tr><th>Supplier</th><th>Invoice #</th><th>Date</th><th>Status</th><th>Subtotal</th><th>GST</th><th>PST</th><th>Total</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${esc(x.supplier)}</td><td>${esc(x.invoice_number)}</td><td>${esc(x.invoice_date)}</td><td>${esc(x.status)}</td><td>${money(x.subtotal)}</td><td>${money(x.gst_amount)}</td><td>${money(x.pst_amount)}</td><td>${money(x.total)}</td><td><button onclick="editSupplierInvoice(unpack('${pack(x)}'))">Open</button></td></tr>`).join('')}</table></div>`)}
+function newSupplierInvoice(x={}){panel("📄 "+(x.id?"Supplier Invoice":"New Supplier Invoice"),`<form id="sif"><div class="formgrid"><label>Supplier<input id="sis" value="${esc(x.supplier)}"></label><label>Invoice number<input id="sin" value="${esc(x.invoice_number)}"></label><label>Invoice date<input id="sid" type="date" value="${x.invoice_date||today()}"></label><label>Status<input id="sist" value="${esc(x.status||'Review')}"></label><label>File name/reference<input id="sifn" value="${esc(x.file_name)}"></label></div><label>Notes / OCR text<textarea id="sio">${esc(x.ocr_text)}</textarea></label><button>Save Header</button></form><div id="supplierItems"></div>`);$("sif").onsubmit=async e=>{e.preventDefault();let o={supplier:$("sis").value||null,invoice_number:$("sin").value||null,invoice_date:$("sid").value||null,status:$("sist").value||'Review',file_name:$("sifn").value||null,ocr_text:$("sio").value||null},r=x.id?await db.from("supplier_invoices").update(o).eq("id",x.id).select().single():await db.from("supplier_invoices").insert(o).select().single();if(fail(r))return;editSupplierInvoice(r.data)};if(x.id)renderSupplierItems(x)}
+async function editSupplierInvoice(x){newSupplierInvoice(x)}
+async function renderSupplierItems(inv){let r=await db.from("supplier_invoice_items").select("*").eq("supplier_invoice_id",inv.id),a=r.data||[],sub=a.reduce((s,i)=>s+n(i.quantity)*n(i.unit_cost),0),g=sum(a,'gst_amount'),p=sum(a,'pst_amount'),tot=sub+g+p;await db.from("supplier_invoices").update({subtotal:sub,gst_amount:g,pst_amount:p,total:tot}).eq("id",inv.id);$("supplierItems").innerHTML=`<div class="subcard"><button onclick="newSupplierItem('${inv.id}')">Add Line Item</button><div class="kpis"><div class="kpi">Subtotal<b>${money(sub)}</b></div><div class="kpi">GST<b>${money(g)}</b></div><div class="kpi">PST<b>${money(p)}</b></div><div class="kpi">Total<b>${money(tot)}</b></div></div><div class="scroll"><table><tr><th>Part #</th><th>Description</th><th>Qty</th><th>Unit Cost</th><th>GST</th><th>PST</th><th></th></tr>${a.map(i=>`<tr><td>${esc(i.part_number)}</td><td>${esc(i.description)}</td><td>${i.quantity}</td><td>${money(i.unit_cost)}</td><td>${money(i.gst_amount)}</td><td>${money(i.pst_amount)}</td><td><button onclick="newSupplierItem('${inv.id}',unpack('${pack(i)}'))">Edit</button></td></tr>`).join('')}</table></div></div>`}
+function newSupplierItem(invId,x={}){panel("📄 Supplier Invoice Item",`<form id="siif"><div class="formgrid"><label>Part #<input id="siip" value="${esc(x.part_number)}"></label><label>Description<input id="siidesc" value="${esc(x.description)}"></label><label>Quantity<input id="siiq" type="number" step=".01" value="${x.quantity||1}"></label><label>Unit cost<input id="siic" type="number" step=".01" value="${n(x.unit_cost)}"></label></div><label><input id="siig" type="checkbox" ${n(x.gst_amount)>0?'checked':''}> GST 5%</label><label><input id="siipst" type="checkbox" ${n(x.pst_amount)>0?'checked':''}> PST 7%</label><button>Save</button></form>`);$("siif").onsubmit=async e=>{e.preventDefault();let q=n($("siiq").value)||1,c=n($("siic").value),t=tx(q*c,$("siig").checked,$("siipst").checked),o={supplier_invoice_id:invId,part_number:$("siip").value||null,description:$("siidesc").value||null,quantity:q,unit_cost:c,gst_amount:t.gst,pst_amount:t.pst},r=x.id?await db.from("supplier_invoice_items").update(o).eq("id",x.id):await db.from("supplier_invoice_items").insert(o);if(fail(r))return;let h=await db.from("supplier_invoices").select("*").eq("id",invId).single();editSupplierInvoice(h.data)}}
+
+async function reports(){let r=await db.from("weekend_reports").select("*").order("report_date",{ascending:false});panel("📊 Weekend Reports",`<div class="actions"><button onclick="newReport()">Generate Weekend Report</button></div><div class="scroll"><table><tr><th>Week Ending</th><th>Jobs</th><th>Revenue</th><th>Parts Cost</th><th>Labour Cost</th><th>Other Expense</th><th>Net GST</th><th>Net PST</th><th></th></tr>${(r.data||[]).map(x=>`<tr><td>${x.report_date}</td><td>${x.jobs_completed}</td><td>${money(x.revenue)}</td><td>${money(x.parts_expense)}</td><td>${money(x.labour_expense)}</td><td>${money(x.other_expense)}</td><td>${money(x.net_gst)}</td><td>${money(x.net_pst)}</td><td><button onclick="newReport(unpack('${pack(x)}'))">Recalculate</button></td></tr>`).join('')}</table></div>`)}
+function dateMinus(date,days){let d=new Date(date+'T12:00:00');d.setDate(d.getDate()-days);return d.toISOString().slice(0,10)}
+function newReport(x={}){panel("📊 Generate Weekend Report",`<form id="wrf"><label>Week ending date<input id="wrd" type="date" value="${x.report_date||today()}"></label><label>Manager notes<textarea id="wrn">${esc(x.manager_notes)}</textarea></label><button>Generate / Save</button></form><div id="wrprev"></div>`);$("wrf").onsubmit=async e=>{e.preventDefault();let end=$("wrd").value,start=dateMinus(end,6),p=await db.from("payments").select("amount,gst_amount,pst_amount,payment_date").gte("payment_date",start).lte("payment_date",end),ex=await db.from("shop_expenses").select("amount,gst_amount,pst_amount,expense_date").gte("expense_date",start).lte("expense_date",end),pa=await db.from("job_parts").select("actual_cost,created_at").gte("created_at",start+'T00:00:00').lte("created_at",end+'T23:59:59'),h=await db.from("technician_hours").select("hours,cost_rate,work_date").gte("work_date",start).lte("work_date",end),j=await db.from("repair_jobs").select("id,status,updated_at").in("status",['Completed']).gte("updated_at",start+'T00:00:00').lte("updated_at",end+'T23:59:59'),ps=p.data||[],es=ex.data||[],partsCost=(pa.data||[]).reduce((s,z)=>s+n(z.actual_cost),0),labCost=(h.data||[]).reduce((s,z)=>s+n(z.hours)*n(z.cost_rate),0),rev=sum(ps,'amount'),other=sum(es,'amount'),pg=sum(ps,'gst_amount'),pp=sum(ps,'pst_amount'),eg=sum(es,'gst_amount'),ep=sum(es,'pst_amount'),o={report_date:end,jobs_completed:(j.data||[]).length,revenue:rev,parts_expense:partsCost,labour_expense:labCost,other_expense:other,outstanding_amount:0,manager_notes:$("wrn").value||null,payment_gst:pg,payment_pst:pp,expense_gst:eg,expense_pst:ep,net_gst:pg-eg,net_pst:pp-ep,updated_at:new Date().toISOString()};let r=await db.from("weekend_reports").upsert(o,{onConflict:'report_date'});if(fail(r))return;reports()}}
+
+async function bookkeeping(){panel("📚 Bookkeeping",`<form id="bk"><div class="formgrid"><label>From<input id="bf" type="date" value="${dateMinus(today(),30)}"></label><label>To<input id="bt" type="date" value="${today()}"></label></div><button>Generate</button></form><div id="bkout"></div>`);$("bk").onsubmit=async e=>{e.preventDefault();let f=$("bf").value,t=$("bt").value,[p,ex,partsq,h,sup,fix]=await Promise.all([db.from("payments").select("amount,gst_amount,pst_amount,payment_date").gte("payment_date",f).lte("payment_date",t),db.from("shop_expenses").select("amount,gst_amount,pst_amount,expense_date").gte("expense_date",f).lte("expense_date",t),db.from("job_parts").select("actual_cost,purchase_gst,purchase_pst,created_at").gte("created_at",f+'T00:00:00').lte("created_at",t+'T23:59:59'),db.from("technician_hours").select("hours,cost_rate,billed_rate,work_date").gte("work_date",f).lte("work_date",t),db.from("shop_supplies").select("actual_cost,sold_price,purchase_gst,purchase_pst,sold_gst,sold_pst,created_at").gte("created_at",f+'T00:00:00').lte("created_at",t+'T23:59:59'),db.from("fixed_expenses").select("amount,gst_amount,pst_amount,expense_date,active").gte("expense_date",f).lte("expense_date",t)]),ps=p.data||[],es=ex.data||[],prs=partsq.data||[],hs=h.data||[],ss=sup.data||[],fs=(fix.data||[]).filter(x=>x.active),revenue=sum(ps,'amount'),shopExp=sum(es,'amount'),partsCost=sum(prs,'actual_cost'),labCost=hs.reduce((s,x)=>s+n(x.hours)*n(x.cost_rate),0),labBill=hs.reduce((s,x)=>s+n(x.hours)*n(x.billed_rate),0),supCost=sum(ss,'actual_cost'),supSell=sum(ss,'sold_price'),fixedCost=sum(fs,'amount'),gstIn=sum(ps,'gst_amount')+sum(ss,'sold_gst'),pstIn=sum(ps,'pst_amount')+sum(ss,'sold_pst'),gstOut=sum(es,'gst_amount')+sum(prs,'purchase_gst')+sum(ss,'purchase_gst')+sum(fs,'gst_amount'),pstOut=sum(es,'pst_amount')+sum(prs,'purchase_pst')+sum(ss,'purchase_pst')+sum(fs,'pst_amount'),costs=shopExp+partsCost+labCost+supCost+fixedCost,profit=revenue-costs,rows=[{from:f,to:t,revenue,shop_expenses:shopExp,parts_cost:partsCost,labour_cost:labCost,labour_billed:labBill,shop_supply_cost:supCost,shop_supply_sold:supSell,fixed_expenses:fixedCost,total_costs:costs,profit,gst_collected:gstIn,gst_input:gstOut,net_gst:gstIn-gstOut,pst_collected:pstIn,pst_input:pstOut,net_pst:pstIn-pstOut}];window._bkRows=rows;$("bkout").innerHTML=`<div class="kpis"><div class="kpi">Revenue<b>${money(revenue)}</b></div><div class="kpi">Costs<b>${money(costs)}</b></div><div class="kpi">Profit<b>${money(profit)}</b></div><div class="kpi">Net GST<b>${money(gstIn-gstOut)}</b></div><div class="kpi">Net PST<b>${money(pstIn-pstOut)}</b></div></div><div class="subcard"><b>Cost breakdown</b><p>Shop expenses ${money(shopExp)} · Parts ${money(partsCost)} · Labour ${money(labCost)} · Supplies ${money(supCost)} · Fixed ${money(fixedCost)}</p><p>Labour billed ${money(labBill)} · Supply sold ${money(supSell)}</p><div class="actions"><button onclick="csvDownload('oakbank-bookkeeping-${f}-to-${t}.csv',window._bkRows)">Export CSV</button><button class="light" onclick="window.print()">Print</button></div></div>`}}
+
+for(const b of document.querySelectorAll('[data-view]'))b.onclick=()=>window[b.dataset.view]();
 </script>
-</body>
-</html>
+</body></html>
